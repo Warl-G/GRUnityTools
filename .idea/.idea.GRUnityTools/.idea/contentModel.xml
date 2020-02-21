@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="GRTools" t="Include">
+          <e p="Runtime" t="Include">
+            <e p="Localization" t="Include">
+              <e p="LocalizeUtil.cs" t="Include" />
+            </e>
+            <e p="Thread" t="Include">
+              <e p="Loom.cs" t="Include" />
+              <e p="TaskQueue.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="Test.cs" t="Include" />
+        </e>
+      </e>
+      <e p="GRTools.Runtime.csproj" t="IncludeRecursive" />
+      <e p="GRUnityTools.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp/bin" t="ExcludeRecursive" />
+    </e>
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_GRUnityTools.1931847939.00" t="ExcludeRecursive" />
+  </component>
+</project>
