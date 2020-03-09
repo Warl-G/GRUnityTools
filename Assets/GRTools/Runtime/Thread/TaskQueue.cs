@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using UnityEngine.Assertions;
 
 namespace GRTools.Threading
 {
@@ -39,7 +37,7 @@ namespace GRTools.Threading
         /// <param name="tag"></param>
         /// <param name="concurrentCount"></param>
         /// <returns></returns>
-        public static TaskQueue CreateGlobalQueue([NotNull] string tag, int concurrentCount)
+        public static TaskQueue CreateGlobalQueue(string tag, int concurrentCount)
         {
             if (string.IsNullOrEmpty(tag)) throw new ArgumentNullException(nameof(tag));
 
