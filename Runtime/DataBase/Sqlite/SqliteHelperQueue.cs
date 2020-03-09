@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using GRTools.Multithreading;
+using GRTools.Threading;
 using Mono.Data.Sqlite;
-using GRTools.SqliteHelper.Extension;
 
-namespace GRTools.SqliteHelper.Queue
+namespace GRTools.SqliteHelper
 {
     public class SqliteHelperQueue
     {
@@ -16,23 +15,13 @@ namespace GRTools.SqliteHelper.Queue
             get { return _sqliteHelper.Connection; }
         }
 
-        public SqliteCommand Command
-        {
-            get { return _sqliteHelper.Command; }
-        }
-
-        public string CurrentDbPath
-        {
-            get { return _sqliteHelper.CurrentDbPath; }
-        }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dbPath">数据库路径</param>
         public SqliteHelperQueue(string dbPath)
         {
-            _queue = TaskQueue.CreateSerialQueue();
+            _queue = TaskQueue.CreateGlobalSerialQueue(dbPath);
             _sqliteHelper = new SqliteHelper(dbPath);
 
         }
@@ -73,13 +62,31 @@ namespace GRTools.SqliteHelper.Queue
         /// 队列中执行操作
         /// </summary>
         /// <param name="sqlAction"></param>
-        public void Execute(Action<SqliteCommand> sqlAction)
+        public void Execute(Action<SqliteConnection> sqlAction)
         {
-            _queue.RunSync(() => { sqlAction(Command); });
+            _queue.RunSync(() => { sqlAction(Connection); });
+        }
+        
+        /// <summary>
+        /// 队列中非查询执行SQL带参语句
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public void ExecuteSqlNonQuery(string sql, Dictionary<string, object> param = null)
+        {
+            _queue.RunSync(() =>
+            {
+                using (SqliteCommand command = Connection.CreateCommand())
+                {
+                    command.ExecuteSqlNonQuery(sql, param);
+                }
+                
+            });
         }
 
         /// <summary>
-        /// 队列中执行SQL带参语句
+        /// 队列中执行 SQL 带参语句
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="param"></param>
@@ -87,7 +94,13 @@ namespace GRTools.SqliteHelper.Queue
         public SqliteDataReader ExecuteSql(string sql, Dictionary<string, object> param = null)
         {
             SqliteDataReader reader = null;
-            _queue.RunSync(() => { reader = Command.ExecuteSql(sql, param); });
+            _queue.RunSync(() =>
+            {
+                using (SqliteCommand command = Connection.CreateCommand())
+                {
+                    reader = command.ExecuteSql(sql, param);
+                }
+            });
             return reader;
         }
 
@@ -95,9 +108,9 @@ namespace GRTools.SqliteHelper.Queue
         /// 队列中执行事务，
         /// </summary>
         /// <param name="sqlAction">返回是否回滚，回滚true，提交false</param>
-        public void Transaction(Func<SqliteCommand, SqliteTransaction, bool> sqlAction)
+        public void Transaction(Func<SqliteConnection, SqliteTransaction, bool> sqlAction)
         {
-            _queue.RunSync(() => { Command.Transaction(sqlAction); });
+            _queue.RunSync(() => { Connection.Transaction(sqlAction); });
         }
     }
 }

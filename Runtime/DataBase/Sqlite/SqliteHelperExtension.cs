@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Mono.Data.Sqlite;
 
-namespace GRTools.SqliteHelper.Extension
+namespace GRTools.SqliteHelper
 {
         public static class SqliteConnectionExtensionBase
         {
