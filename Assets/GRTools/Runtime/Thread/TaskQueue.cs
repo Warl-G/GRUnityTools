@@ -2,38 +2,27 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using UnityEngine.Assertions;
 
-namespace GRTools.Multithreading
+namespace GRTools.Threading
 {
     public class TaskQueue
     {
-        private const int DefaultConcurrentCount = 32;
+        public const int DefaultConcurrentCount = 32;
+        public const string DefaultSerialQueueTag = "Default_Serial_Queue";
+        public const string DefaultConcurrentQueueTag = "Default_Concurrent_Queue";
+        
         private static object _lock = new object();
-        private static TaskQueue _defaultSerial;
-        private static TaskQueue _defaultConcurrent;
-
+        private static Dictionary<int, TaskQueue> _globalQueues = new Dictionary<int, TaskQueue>();
+        
         private LimitedConcurrencyLevelTaskScheduler _scheduler;
-
         /// <summary>
         /// 默认串行队列
         /// </summary>
         public static TaskQueue DefaultSerailQueue
         {
-            get
-            {
-                if (_defaultSerial == null)
-                {
-                    lock (_lock)
-                    {
-                        if (_defaultSerial == null)
-                        {
-                            _defaultSerial = new TaskQueue(1);
-                        }
-                    }
-                }
-
-                return _defaultSerial;
-            }
+            get { return CreateGlobalQueue(DefaultSerialQueueTag, 1); }
         }
 
         /// <summary>
@@ -41,29 +30,72 @@ namespace GRTools.Multithreading
         /// </summary>
         public static TaskQueue DefaultConcurrentQueue
         {
-            get
+            get { return CreateGlobalQueue(DefaultConcurrentQueueTag, DefaultConcurrentCount); }
+        }
+
+        /// <summary>
+        /// 创建全局队列
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="concurrentCount"></param>
+        /// <returns></returns>
+        public static TaskQueue CreateGlobalQueue([NotNull] string tag, int concurrentCount)
+        {
+            if (string.IsNullOrEmpty(tag)) throw new ArgumentNullException(nameof(tag));
+
+            int hash = tag.GetHashCode();
+            if (_globalQueues == null || !_globalQueues.ContainsKey(hash))
             {
-                if (_defaultConcurrent == null)
+                lock (_lock)
                 {
-                    lock (_lock)
+                    //检查是否存在缓存池
+                    if (_globalQueues == null)
                     {
-                        if (_defaultConcurrent == null)
-                        {
-                            _defaultConcurrent = new TaskQueue(DefaultConcurrentCount);
-                        }
+                        _globalQueues = new Dictionary<int, TaskQueue>();
+                    }
+                    
+                    //检查是否存在指定队列
+                    if (!_globalQueues.ContainsKey(hash))
+                    {
+                        TaskQueue queue = new TaskQueue(concurrentCount);
+                        _globalQueues.Add(hash, queue);
                     }
                 }
-
-                return _defaultConcurrent;
             }
+            
+            return _globalQueues[hash];
+        }
+
+        /// <summary>
+        /// 创建全局串行队列
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public static TaskQueue CreateGlobalSerialQueue(string tag)
+        {
+            return CreateGlobalQueue(tag, 1);
+        }
+        
+        /// <summary>
+        /// 创建全局并发队列
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public static TaskQueue CreateGlobalConcurrentQueue(string tag)
+        {
+            return CreateGlobalQueue(tag, DefaultConcurrentCount);
         }
 
         /// <summary>
         /// 创建并发队列
         /// </summary>
-        /// <param name="concurrentCount">根据并发需求，为1即串行队列</param>
-        public TaskQueue(int concurrentCount)
+        /// <param name="concurrentCount">设置允许并发数，默认为1，即串行队列</param>
+        public TaskQueue(int concurrentCount = 1)
         {
+            if (concurrentCount < 0)
+            {
+                concurrentCount = 1;
+            }
             _scheduler = new LimitedConcurrencyLevelTaskScheduler(concurrentCount);
             Loom.Initialize();
         }
@@ -94,6 +126,10 @@ namespace GRTools.Multithreading
         /// <returns></returns>
         public Task RunAsync(Action action, float delay)
         {
+            if (delay < 0)
+            {
+                delay = 0;
+            }
             Task t = Task.Run(async () =>
             {
                 await Task.Delay((int) (delay * 1000));
@@ -151,6 +187,10 @@ namespace GRTools.Multithreading
 
         public static void RunAsyncOnMainThread(Action action, float delay)
         {
+            if (delay < 0)
+            {
+                delay = 0;
+            }
             Loom.QueueOnMainThread((o => { action(); }), null, delay);
         }
     }

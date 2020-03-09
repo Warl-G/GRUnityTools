@@ -12,26 +12,7 @@ namespace GRTools.SqliteHelper
             get { return _connection; }
         }
 
-        public SqliteCommand Command
-        {
-            get
-            {
-                if (_command == null)
-                {
-                    _command = _connection.CreateCommand();
-                }
-
-                return _command;
-            }
-        }
-
-        /// <summary>
-        /// 数据库目录
-        /// </summary>
-        public string CurrentDbPath { private set; get; }
-
         private SqliteConnection _connection;
-        private SqliteCommand _command;
 
         /// <summary>
         /// 连接数据库
@@ -64,8 +45,7 @@ namespace GRTools.SqliteHelper
             {
                 _connection = new SqliteConnection("Data Source=" + dbPath);
                 _connection.Open();
-                CurrentDbPath = dbPath;
-                Debug.Log("SqliteHelper: Connected to database");
+                Debug.Log("SqliteHelper: Connected to database " + dbPath);
             }
             catch (SqliteException e)
             {
@@ -78,12 +58,6 @@ namespace GRTools.SqliteHelper
         /// </summary>
         public void Close()
         {
-            if (_command != null)
-            {
-                _command.Cancel();
-                _command = null;
-            }
-
             if (_connection != null)
             {
                 _connection.Close();
