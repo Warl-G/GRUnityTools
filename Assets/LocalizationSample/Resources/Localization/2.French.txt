@@ -1,0 +1,15 @@
+Localization_Sample_Key_1=Localization_Sample_Test_1_French
+Localization_Sample_Key_2=Localization_Sample_Test_2_French
+Localization_Sample_Key_3=Localization_Sample_Test_3_French
+
+//some comment
+
+Localization_Sample_Key_4=Localization_Sample_Test_4====4_French
+Localization_Sample_Key_5=Localization_Sample_Test_5_French \n Localization_Sample_Test_5_French
+Localization_Sample_Key_6=Localization_Sample_Test_6_French \t Localization_Sample_Test_6 _French
+
+//some comment
+
+Localization_Sample_Key_7=Sample_Image_French
+
+
