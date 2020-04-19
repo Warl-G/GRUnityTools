@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GRTools.Localization;
+using GRTools.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,17 +14,13 @@ public class LocalizationSample : MonoBehaviour
 
     private void Awake()
     {
-        LocalizationManager.Init(true, SystemLanguage.ChineseSimplified);
+        LocalizationManager.Init(true, SystemLanguage.ChineseSimplified, "", LocalizationFileType.Txt);
+        index = LocalizationManager.Singleton.CurrentLanguageIndex;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(LocalizationManager.Singleton.CurrentLocalizationFile.FileName);
-        Debug.Log(LocalizationManager.Singleton.CurrentLocalizationFile.Type);
-        Debug.Log(LocalizationManager.Singleton.CurrentLocalizationFile.Index);
-        Debug.Log(LocalizationManager.Singleton.CurrentLocalizationFile.Name);
-        Debug.Log(LocalizationManager.Singleton.CurrentLanguageType);
         UpdateList();
     }
 
@@ -34,6 +31,11 @@ public class LocalizationSample : MonoBehaviour
         LocalizationManager.Singleton.ChangeToLanguage(index);
         UpdateList();
 
+    }
+
+    public void ChangeToCsv()
+    {
+        LocalizationManager.Singleton.LoadAllLocalizationFilesData("Csv");
     }
 
     private void UpdateList()
