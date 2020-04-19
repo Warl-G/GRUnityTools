@@ -1,45 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using GRTools.Utils;
 using UnityEngine;
 
 namespace GRTools.Localization
 {
     public class LocalizationParser
     {
-        public enum LocalizationFileType
+        /// <summary>
+        /// 解析本地化文本
+        /// </summary>
+        /// <param name="text">本地化文本</param>
+        /// <param name="type">本地化文件类型</param>
+        /// <returns></returns>
+        public Dictionary<string, string> Parse(string text, LocalizationFileType type = LocalizationFileType.Csv)
         {
-            Txt,
-            Csv,
-            Asset
-        }
-
-        public Dictionary<string, string> ParseFile(string filePath, LocalizationFileType type = LocalizationFileType.Txt)
-        {
+            if (type == LocalizationFileType.Csv)
+            {
+                return ParseCsv(text);
+            }
+            
             if (type == LocalizationFileType.Txt)
             {
-                return ParseTxtFile(filePath);
-            }
-
-            return null;
-        }
-        
-        private Dictionary<string, string> ParseTxtFile(string filePath)
-        {
-            TextAsset asset = Resources.Load<TextAsset>(filePath);
-            if (asset == null)
-            {
-                Debug.LogError("no localizefile " + filePath);
-            }
-            else
-            {
-                Dictionary<string, string> dict = ParseTxt(asset.text);
-                Resources.UnloadAsset(asset);
-                return dict;
+                return ParseTxt(text);
             }
 
             return null;
         }
     
+        /// <summary>
+        /// 解析本地化 txt 文本
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public Dictionary<string, string> ParseTxt(string txt)
         {
             if (string.IsNullOrEmpty(txt))
@@ -59,6 +52,31 @@ namespace GRTools.Localization
                         localDict.Add(keyAndValue[0], value);
                     }
                 }
+            }
+
+            return localDict;
+        }
+
+        /// <summary>
+        /// 解析本地化 csv 文本
+        /// </summary>
+        /// <param name="csv"></param>
+        /// <returns></returns>
+        public Dictionary<string, string> ParseCsv(string csv)
+        {
+            if (string.IsNullOrEmpty(csv))
+            {
+                return null;
+            }
+            Dictionary<string, string> localDict = new Dictionary<string, string>();
+            var list = CsvParser.Parse(csv);
+            foreach (var keyAndValue in list)
+            {
+                if (keyAndValue.Count < 1 || string.IsNullOrEmpty(keyAndValue[0] as string) || keyAndValue[1] == null)
+                {
+                    continue;
+                }
+                localDict.Add(keyAndValue[0].ToString(), keyAndValue[1].ToString());
             }
 
             return localDict;
