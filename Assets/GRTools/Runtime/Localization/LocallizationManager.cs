@@ -16,6 +16,7 @@ namespace GRTools.Localization
         Csv,
         Asset
     }
+
     public struct LocalizationFile
     { 
         public int Index { private set; get; }
@@ -154,8 +155,6 @@ namespace GRTools.Localization
 
         private SystemLanguage _defaultLanguage = SystemLanguage.English;
 
-        private LocalizationParser _fileParser;
-
         private LocalizationFile _currentLocalizationFile;
 
         private Dictionary<string, string> _localDict;
@@ -179,9 +178,7 @@ namespace GRTools.Localization
         {
             _followSystem = followSystem;
             _defaultLanguage = defaultLanguage;
-            
-            _fileParser = new LocalizationParser();
-            
+
             if (string.IsNullOrEmpty(filesPath))
             {
                 filesPath = KLocalizeFolder;
@@ -275,7 +272,8 @@ namespace GRTools.Localization
                 asset = Resources.Load<TextAsset>(LocalizationFilePath + "/" + LocalizationFileList[0].FileName);
             }
 
-            Dictionary<string, string> dict = _fileParser.Parse(asset.text, FileType);
+            Dictionary<string, string> dict = LocalizationParser.Parse(asset.text, FileType);
+            
             Resources.UnloadAsset(asset);
 
             if (_localDict != null)
@@ -380,27 +378,27 @@ namespace GRTools.Localization
         /// <param name="defaultImageName">默认图片名称</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public IEnumerator GetLocalizedSpriteByNameAsync(string imageName, string defaultImageName, Action<Sprite> callback)
+        public IEnumerator GetLocalizedSpriteByNameAsync(string spriteName, string defaultSpriteName, Action<Sprite> callback)
         {
             ResourceRequest request =
-                Resources.LoadAsync<Sprite>(LocalizationImagePath + "/" + CurrentLocalizationFile.Name + "/" + imageName);
+                Resources.LoadAsync<Sprite>(LocalizationImagePath + "/" + CurrentLocalizationFile.Name + "/" + spriteName);
             yield return request;
             Sprite image = request.asset as Sprite;
             if (image == null)
             {
                 if (WarnMissedValue)
                 {
-                    Debug.LogWarning("Localization: Miss localized image: " + imageName);
+                    Debug.LogWarning("Localization: Miss localized image: " + spriteName);
                 }
 
                 request =
-                    Resources.LoadAsync<Sprite>(LocalizationDefaultImagePath + "/" + defaultImageName);
+                    Resources.LoadAsync<Sprite>(LocalizationDefaultImagePath + "/" + defaultSpriteName);
                 yield return request;
                 image = request.asset as Sprite;
                 
                 if (WarnMissedValue)
                 {
-                    Debug.LogWarning("Localization: Miss localized default image: " + imageName);
+                    Debug.LogWarning("Localization: Miss localized default image: " + defaultSpriteName);
                 }
             }
 

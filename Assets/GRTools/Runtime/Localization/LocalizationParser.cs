@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GRTools.Utils;
-using UnityEngine;
 
 namespace GRTools.Localization
 {
@@ -13,7 +12,7 @@ namespace GRTools.Localization
         /// <param name="text">本地化文本</param>
         /// <param name="type">本地化文件类型</param>
         /// <returns></returns>
-        public Dictionary<string, string> Parse(string text, LocalizationFileType type = LocalizationFileType.Csv)
+        public static Dictionary<string, string> Parse(string text, LocalizationFileType type = LocalizationFileType.Csv)
         {
             if (type == LocalizationFileType.Csv)
             {
@@ -33,7 +32,7 @@ namespace GRTools.Localization
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
-        public Dictionary<string, string> ParseTxt(string txt)
+        public static Dictionary<string, string> ParseTxt(string txt)
         {
             if (string.IsNullOrEmpty(txt))
             {
@@ -62,21 +61,39 @@ namespace GRTools.Localization
         /// </summary>
         /// <param name="csv"></param>
         /// <returns></returns>
-        public Dictionary<string, string> ParseCsv(string csv)
+        public static Dictionary<string, string> ParseCsv(string csv)
         {
             if (string.IsNullOrEmpty(csv))
             {
                 return null;
             }
             Dictionary<string, string> localDict = new Dictionary<string, string>();
-            var list = CsvParser.Parse(csv);
-            foreach (var keyAndValue in list)
+            var dict = CsvParser.ParseRowToDictionary(csv);
+            foreach (var key in dict.Keys)
             {
-                if (keyAndValue.Count < 1 || string.IsNullOrEmpty(keyAndValue[0] as string) || keyAndValue[1] == null)
+                var values = dict[key];
+                if (!string.IsNullOrEmpty(key) && values.Count > 0)
                 {
-                    continue;
+                    localDict.Add(key, values[0].ToString());
                 }
-                localDict.Add(keyAndValue[0].ToString(), keyAndValue[1].ToString());
+            }
+
+            return localDict;
+        }
+
+        public static Dictionary<string, object> ParseAsset(LocalizationAsset asset)
+        {
+            Dictionary<string, object> localDict = new Dictionary<string, object>();
+            foreach (var keyAndValue in asset.localization)
+            {
+                if (keyAndValue.sprite != null)
+                {
+                    localDict.Add(keyAndValue.key, keyAndValue.sprite);
+                }
+                else
+                {
+                    localDict.Add(keyAndValue.key, keyAndValue.text);
+                }
             }
 
             return localDict;
