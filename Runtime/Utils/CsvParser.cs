@@ -1,9 +1,5 @@
-﻿
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using UnityEngine;
-using Object = System.Object;
 
 namespace GRTools.Utils
 {
@@ -11,7 +7,7 @@ namespace GRTools.Utils
     {
         private const string COLUMN_SPLIT_PATTERN = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
         private const string ROW_SPLIT_PATTERN = @"\r\n|\n\r|\n|\r";
-        private const string Quote_PATTERN = @"(?<=^"")(.|\n)*?(?=""$)";
+        private const string QUOTE_PATTERN = @"(?<=^"")(.|\n)*?(?=""$)";
 
         private static object ParseSingleCell(string cell)
         {
@@ -30,7 +26,7 @@ namespace GRTools.Utils
                 else
                 {
                     cell = Regex.Unescape(cell);
-                    var match = Regex.Match(cell, Quote_PATTERN);
+                    var match = Regex.Match(cell, QUOTE_PATTERN);
 
                     if (match.Success)
                     {

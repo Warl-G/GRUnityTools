@@ -16,9 +16,10 @@ namespace GRTools.Localization
     
     public class LocalizationComponent : MonoBehaviour
     {
+        public LocalizationComponentItem[] items; 
+        
         private SystemLanguage _currentLanguage;
 
-        public LocalizationComponentItem[] items;
         private void Start()
         {
             if (LocalizationManager.Singleton != null)
