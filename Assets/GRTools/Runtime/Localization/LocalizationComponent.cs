@@ -51,6 +51,10 @@ namespace GRTools.Localization
                     {
                         ((Text)item.component).text = value;
                     }
+                    else if (item.component is TextMesh mesh)
+                    {
+                        mesh.text = value;
+                    }
                     else
                     {
                         Image imageComponent = null;
@@ -61,9 +65,9 @@ namespace GRTools.Localization
                             imageComponent = (Image) item.component;
                         }
 
-                        if (item.component is SpriteRenderer)
+                        if (item.component is SpriteRenderer component)
                         {
-                            spriteRenderer = (SpriteRenderer) item.component;
+                            spriteRenderer = component;
                         }
 
                         if (imageComponent != null || spriteRenderer != null)
