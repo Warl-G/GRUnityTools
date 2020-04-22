@@ -14,8 +14,7 @@ namespace GRTools.Localization
     {
         Txt,
         Csv,
-        Json,
-        Asset
+        Json
     }
 
     public struct LocalizationFile

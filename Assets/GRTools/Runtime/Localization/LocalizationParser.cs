@@ -103,25 +103,6 @@ namespace GRTools.Localization
             
             return localDict;
         }
-
-        public static Dictionary<string, object> ParseAsset(LocalizationAsset asset)
-        {
-            Dictionary<string, object> localDict = new Dictionary<string, object>();
-            foreach (var keyAndValue in asset.localization)
-            {
-                if (keyAndValue.sprite != null)
-                {
-                    localDict.Add(keyAndValue.key, keyAndValue.sprite);
-                }
-                else
-                {
-                    localDict.Add(keyAndValue.key, keyAndValue.text);
-                }
-            }
-
-            return localDict;
-        }
-
     }
 }
 
