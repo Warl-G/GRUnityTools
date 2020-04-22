@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GRTools.Utils;
+using Newtonsoft.Json;
 
 namespace GRTools.Localization
 {
@@ -22,6 +23,11 @@ namespace GRTools.Localization
             if (type == LocalizationFileType.Txt)
             {
                 return ParseTxt(text);
+            }
+
+            if (type == LocalizationFileType.Json)
+            {
+                return ParseJson(text);
             }
 
             return null;
@@ -78,6 +84,23 @@ namespace GRTools.Localization
                 }
             }
 
+            return localDict;
+        }
+
+        public static Dictionary<string, string> ParseJson(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+            Dictionary<string, string> localDict = new Dictionary<string, string>();
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            foreach (var key in dict.Keys)
+            {
+                string value = Regex.Unescape(dict[key].ToString());
+                localDict.Add(key, value);
+            }
+            
             return localDict;
         }
 
