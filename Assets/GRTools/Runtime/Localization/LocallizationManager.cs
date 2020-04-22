@@ -14,6 +14,7 @@ namespace GRTools.Localization
     {
         Txt,
         Csv,
+        Json,
         Asset
     }
 

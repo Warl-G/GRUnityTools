@@ -37,6 +37,11 @@ public class LocalizationSample : MonoBehaviour
     {
         LocalizationManager.Singleton.LoadAllLocalizationFilesData("Csv");
     }
+    
+    public void ChangeToJson()
+    {
+        LocalizationManager.Singleton.LoadAllLocalizationFilesData("Json", LocalizationFileType.Json);
+    }
 
     private void UpdateList()
     {
