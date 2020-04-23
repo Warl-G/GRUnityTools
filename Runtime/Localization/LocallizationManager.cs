@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace GRTools.Localization
 {
-    
     public enum LocalizationFileType
     {
         Txt,
@@ -84,7 +79,7 @@ namespace GRTools.Localization
         /// <summary>
         /// 本地化文件列表
         /// </summary>
-        public LocalizationFile[] LocalizationFileList { private set; get; }
+        public LocalizationFile[] FileList { private set; get; }
         
         /// <summary>
         /// 本地化文件类型
@@ -94,17 +89,17 @@ namespace GRTools.Localization
         /// <summary>
         /// 本地化文件路径
         /// </summary>
-        public string LocalizationFilePath { private set; get; }
+        public string FilePath { private set; get; }
         
         /// <summary>
         /// 本地化默认图片路径，默认 'Localization/Sprites/_Default' 或 '初始化配置目录/Sprites/_Default'
         /// </summary>
-        public string LocalizationDefaultImagePath;
+        public string DefaultImagesPath;
         
         /// <summary>
         /// 本地化图片路径，默认 'Localization/Sprites' 或 '初始化配置目录/Sprites'
         /// </summary>
-        public string LocalizationImagePath;
+        public string ImagesPath;
 
         /// <summary>
         /// 警告缺失键值
@@ -140,10 +135,10 @@ namespace GRTools.Localization
         /// </summary>
         public LocalizationFile CurrentLocalizationFile
         {
-            get => _currentLocalizationFile;
+            get => _currentFile;
             private set
             {
-                _currentLocalizationFile = value;
+                _currentFile = value;
                 PlayerPrefs.SetInt(KLocalizeKey, (int) value.Type);
                 PlayerPrefs.Save();
             }
@@ -155,7 +150,7 @@ namespace GRTools.Localization
 
         private SystemLanguage _defaultLanguage = SystemLanguage.English;
 
-        private LocalizationFile _currentLocalizationFile;
+        private LocalizationFile _currentFile;
 
         private Dictionary<string, string> _localDict;
 
@@ -188,9 +183,9 @@ namespace GRTools.Localization
                 filesPath = filesPath.Remove(filesPath.Length - 1);
             }
 
-            LocalizationImagePath = filesPath + KLocalizeImagesPath;
+            ImagesPath = filesPath + KLocalizeImagesPath;
 
-            LocalizationDefaultImagePath = filesPath + KLocalizeDefaultImagesPath;
+            DefaultImagesPath = filesPath + KLocalizeDefaultImagesPath;
             //获取语言列表
             LoadAllLocalizationFilesData(filesPath, fileType);
         }
@@ -202,11 +197,11 @@ namespace GRTools.Localization
         /// <param name="fileType">语言文件类型</param>
         public void LoadAllLocalizationFilesData(string filesPath, LocalizationFileType fileType = LocalizationFileType.Csv)
         {
-            LocalizationFilePath = filesPath;
+            FilePath = filesPath;
             FileType = fileType;
             SystemLanguage savedLanguageType = (SystemLanguage)PlayerPrefs.GetInt(KLocalizeKey, _followSystem ? (int)SystemLanguageType : (int)_defaultLanguage);
             
-            TextAsset[] res = Resources.LoadAll<TextAsset>(LocalizationFilePath);
+            TextAsset[] res = Resources.LoadAll<TextAsset>(FilePath);
             
             if (res.Length > 0)
             {
@@ -217,9 +212,9 @@ namespace GRTools.Localization
                     TextAsset asset = res[i];
                     LocalizationFile data = new LocalizationFile(asset.name);
                     fileList[i] = data;
-                    if (_currentLocalizationFile.FileName == null && data.Type == savedLanguageType)
+                    if (_currentFile.FileName == null && data.Type == savedLanguageType)
                     {
-                        _currentLocalizationFile = data;
+                        _currentFile = data;
                     }
         
                     if (defaultIndex == -1 && data.Type == _defaultLanguage)
@@ -230,22 +225,22 @@ namespace GRTools.Localization
                     Resources.UnloadAsset(asset);
                 }
         
-                LocalizationFileList = fileList;
+                FileList = fileList;
         
                 //若无选中语言则依据系统语言，若无系统语言则默认第一个
-                if (_currentLocalizationFile.FileName == null)
+                if (_currentFile.FileName == null)
                 {
                     if (defaultIndex > -1)
                     {
-                        _currentLocalizationFile = LocalizationFileList[defaultIndex];
+                        _currentFile = FileList[defaultIndex];
                     }
                     else
                     {
-                        _currentLocalizationFile = LocalizationFileList[0];
+                        _currentFile = FileList[0];
                     }
                 }
         
-                LoadLocalizationDict(_currentLocalizationFile.FileName);
+                LoadLocalizationDict(_currentFile.FileName);
                 
                 if (LocalizationChangeEvent != null)
                 {
@@ -254,8 +249,8 @@ namespace GRTools.Localization
             }
             else
             {
-                _currentLocalizationFile = new LocalizationFile(savedLanguageType);
-                LocalizationFileList = new LocalizationFile[0];
+                _currentFile = new LocalizationFile(savedLanguageType);
+                FileList = new LocalizationFile[0];
             }
         }
 
@@ -265,11 +260,11 @@ namespace GRTools.Localization
         /// <param name="fileName">文件名</param>
         private void LoadLocalizationDict(string fileName)
         {
-            TextAsset asset = Resources.Load<TextAsset>(LocalizationFilePath + "/" + fileName);
+            TextAsset asset = Resources.Load<TextAsset>(FilePath + "/" + fileName);
             if (asset == null)
             {
                 Debug.LogError("Localization: no localizefile " + fileName);
-                asset = Resources.Load<TextAsset>(LocalizationFilePath + "/" + LocalizationFileList[0].FileName);
+                asset = Resources.Load<TextAsset>(FilePath + "/" + FileList[0].FileName);
             }
 
             Dictionary<string, string> dict = LocalizationParser.Parse(asset.text, FileType);
@@ -292,9 +287,9 @@ namespace GRTools.Localization
         /// <returns></returns>
         private int IndexOfLanguage(SystemLanguage language)
         {
-            for (int i = 0; i < LocalizationFileList.Length; i++)
+            for (int i = 0; i < FileList.Length; i++)
             {
-                if (LocalizationFileList[i].Type == language)
+                if (FileList[i].Type == language)
                 {
                     return i;
                 }
@@ -320,9 +315,9 @@ namespace GRTools.Localization
         /// <returns>是否替换成功</returns>
         public bool ChangeToLanguage(int index)
         {
-            if (LocalizationFileList.Length > 0 && LocalizationFileList.Length > index && index >= 0)
+            if (FileList.Length > 0 && FileList.Length > index && index >= 0)
             {
-                CurrentLocalizationFile = LocalizationFileList[index];
+                CurrentLocalizationFile = FileList[index];
                 LoadLocalizationDict(CurrentLocalizationFile.FileName);
                 if (LocalizationChangeEvent != null)
                 {
@@ -381,7 +376,7 @@ namespace GRTools.Localization
         public IEnumerator GetLocalizedSpriteByNameAsync(string spriteName, string defaultSpriteName, Action<Sprite> callback)
         {
             ResourceRequest request =
-                Resources.LoadAsync<Sprite>(LocalizationImagePath + "/" + CurrentLocalizationFile.Name + "/" + spriteName);
+                Resources.LoadAsync<Sprite>(ImagesPath + "/" + CurrentLocalizationFile.Name + "/" + spriteName);
             yield return request;
             Sprite image = request.asset as Sprite;
             if (image == null)
@@ -392,7 +387,7 @@ namespace GRTools.Localization
                 }
 
                 request =
-                    Resources.LoadAsync<Sprite>(LocalizationDefaultImagePath + "/" + defaultSpriteName);
+                    Resources.LoadAsync<Sprite>(DefaultImagesPath + "/" + defaultSpriteName);
                 yield return request;
                 image = request.asset as Sprite;
                 

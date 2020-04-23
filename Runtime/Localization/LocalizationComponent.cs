@@ -11,7 +11,8 @@ namespace GRTools.Localization
         [Tooltip("本地化键")] public string localizationKey;
         [Tooltip("本地化默认值（文本，图片名称）")] public string defaultValue;
         [Tooltip("是否设置图片原始尺寸")] public bool setNativeSize;
-        
+        internal Vector2 originalImageSize = Vector2.zero;
+
     }
     
     public class LocalizationComponent : MonoBehaviour
@@ -63,6 +64,10 @@ namespace GRTools.Localization
                         if (item.component.GetType() == typeof(Image))
                         {
                             imageComponent = (Image) item.component;
+                            if (item.originalImageSize == Vector2.zero)
+                            {
+                                item.originalImageSize = imageComponent.rectTransform.sizeDelta;
+                            }
                         }
 
                         if (item.component is SpriteRenderer component)
@@ -85,6 +90,10 @@ namespace GRTools.Localization
                                             if (item.setNativeSize)
                                             {
                                                 img.SetNativeSize();
+                                            }
+                                            else
+                                            {
+                                                imageComponent.rectTransform.sizeDelta = item.originalImageSize;
                                             }
                                         }
 
