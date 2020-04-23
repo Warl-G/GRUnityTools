@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/LocalizationSample/Scenes/LocalizationSample.unity
+    guid: b11f1be810b7c4dda91e9f9ae8f0dabc
   m_configObjects: {}

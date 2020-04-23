@@ -349,14 +349,15 @@ namespace GRTools.SqliteHelper
                 List<Dictionary<string, object>> results = new List<Dictionary<string, object>>();
                 while (reader.Read())
                 {
+                    Dictionary<string, object> dict = new Dictionary<string, object>();
                     int colsCount = reader.FieldCount;
                     for (int i = 0; i < colsCount; i++)
                     {
                         string name = reader.GetName(i);
                         object value = reader.GetValue(i);
-                        Dictionary<string, object> dict = new Dictionary<string, object>() {{name, value}};
-                        results.Add(dict);
+                        dict.Add(name, value);
                     }
+                    results.Add(dict);
                 }
 
                 return results.ToArray();
