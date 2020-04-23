@@ -1,12 +1,12 @@
 # GRUnityTools
-A Unity Tools Package ver.1.1.0
+A Unity Tools Package ver.1.2.0
 
 GRTools 是一个集成多种工具的 Unity Package，持续扩充中  
 
 ### 集成方式
 
 1. 直接下载源码放入项目中使用
-2. 本项目支持upm，可在 Packages/manifest.json 中 添加 ```"com.warlg.grtools": "https://github.com/Warl-G/GRUnityTools.git#1.1.0"```集成
+2. 本项目支持upm，可在 Packages/manifest.json 中 添加 ```"com.warlg.grtools": "https://github.com/Warl-G/GRUnityTools.git#1.2.0"```集成
 
 ### 文档  
 
@@ -20,9 +20,9 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 ### Localization
 
-[文档](https://github.com/Warl-G/GRUnityTools/blob/master/Assets/GRTools/Documents/LocalizeUtil.md)
+[文档](https://github.com/Warl-G/GRUnityTools/blob/master/Assets/GRTools/Documents/Localization.md)
 
-简单的多语言工具，无需修改代码即可扩充支持语言，目前暂支持Text、Image、Sprite 控件  
+自己写的多语言工具，无需修改代码即可扩充支持语言，支持 txt、csv 和 json 三种文件格式，支持文本与图片切换，支持Text、Image、Sprite 和 Text Mesh 的快捷刷新  
 
 ### SqliteHelper  
 

@@ -27,7 +27,7 @@ public class LocalizationSample : MonoBehaviour
     public void ChangeLanguage()
     {
         index++;
-        index = index >= LocalizationManager.Singleton.LocalizationFileList.Length ? 0 : index;
+        index = index >= LocalizationManager.Singleton.FileList.Length ? 0 : index;
         LocalizationManager.Singleton.ChangeToLanguage(index);
         UpdateList();
 
@@ -46,9 +46,9 @@ public class LocalizationSample : MonoBehaviour
     private void UpdateList()
     {
         var str = "";
-        for (int i = 0; i < LocalizationManager.Singleton.LocalizationFileList.Length; i++)
+        for (int i = 0; i < LocalizationManager.Singleton.FileList.Length; i++)
         {
-            LocalizationFile file = LocalizationManager.Singleton.LocalizationFileList[i];
+            LocalizationFile file = LocalizationManager.Singleton.FileList[i];
             if (LocalizationManager.Singleton.CurrentLanguageType == file.Type)
             {
                 str += "<color=#FF0000FF>" + file.FileName + "</color>";
