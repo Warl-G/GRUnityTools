@@ -53,12 +53,16 @@ public class LocalizationSample : MonoBehaviour
 
     public void ChangeToCsv()
     {
-        // LocalizationManager.Singleton.LoadAllLocalizationFilesData("Csv");
+        (LocalizationManager.Singleton.parser as LocalizationDefaultParser).parseType = LocalizationFileType.Csv;
+        (LocalizationManager.Singleton.loader as LocalizationResourcesLoader).FilesPath = "Csv"; 
+        LocalizationManager.Singleton.LoadAllLocalizationFilesData();
     }
     
     public void ChangeToJson()
     {
-        // LocalizationManager.Singleton.LoadAllLocalizationFilesData("Json", LocalizationFileType.Json);
+        (LocalizationManager.Singleton.parser as LocalizationDefaultParser).parseType = LocalizationFileType.Json;
+        (LocalizationManager.Singleton.loader as LocalizationResourcesLoader).FilesPath = "Json";
+        LocalizationManager.Singleton.LoadAllLocalizationFilesData();
     }
 
     private void UpdateList()
