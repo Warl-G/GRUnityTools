@@ -188,7 +188,7 @@ Image_Key=Assets/English/Image0
 Image_Key=Assets/Image_Chinese
 ```
 
-![](https://github.com/Warl-G/GRUnityTools/tree/master/Assets/GRTools/Documents/Images/Localization01.png)
+<img src="Images/Localization01.png" style="zoom:50%;" />
 
 #### LocalizationAssetBundleLoader  
 
@@ -217,9 +217,9 @@ Assets/Localization/1.ChineseSimplified/Image_Chinese.png				// 中文图片资�
 Assets/Localization/Common/Common_Image.png
 ```
 
-![](https://github.com/Warl-G/GRUnityTools/tree/master/Assets/GRTools/Documents/Images/Localization02.png)
+<img src="Images/Localization02.png" style="zoom:50%;" />
 
-![](https://github.com/Warl-G/GRUnityTools/tree/master/Assets/GRTools/Documents/Images/Localization03.png)
+<img src="Images/Localization03.png" style="zoom:50%;" />
 
 #### LocalizationAddressableLoader  
 
@@ -229,7 +229,7 @@ LocalizationAddressableLoader 使用`FilesPath`值作为语言文本文件标签
 
 若使用 `LocalizationComponent`自动更新，文本中配置资源 Address 即可
 
-![](https://github.com/Warl-G/GRUnityTools/tree/master/Assets/GRTools/Documents/Images/Localization04.png)
+<img src="Images/Localization04.png" style="zoom:50%;" />
 
 ### ILocalizationParser   
 
