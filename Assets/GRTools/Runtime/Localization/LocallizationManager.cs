@@ -5,22 +5,16 @@ using UnityEngine;
 
 namespace GRTools.Localization
 {
-    public enum LocalizationFileType
-    {
-        Txt,
-        Csv,
-        Json
-    }
-
     public struct LocalizationFile
-    { 
-        public int Index { private set; get; }
-        public SystemLanguage Type { private set; get; }
-        public string Name  { private set; get; }
-        public string FileName  { private set; get; }
+    {
+        public int Index { get; }
+        public SystemLanguage Type { get; }
+        public string Name  { get; }
+        public string FileName  { get; }
 
         public LocalizationFile(SystemLanguage type = SystemLanguage.Unknown)
         {
+            Index = -1;
             Index = -1;
             Type = type;
             Name = type.ToString();
@@ -28,21 +22,28 @@ namespace GRTools.Localization
         }
         public LocalizationFile(string fileName = null)
         {
-            if (string.IsNullOrEmpty(fileName))
+            Index = -1;
+            Type = SystemLanguage.Unknown;
+            Name = "Unknown";
+            FileName = null;
+            
+            if (!string.IsNullOrEmpty(fileName))
             {
-                Index = -1;
-                Type = SystemLanguage.Unknown;
-                Name = "Unknown";
-                FileName = null;
-            }
-            else
-            {
-                string[] lan = fileName.Split('.');
-                Index = Int32.Parse(lan[0]);
-                Name = lan[1];
+                Name = fileName;
                 FileName = fileName;
+                
+                string[] lan = fileName.Split('.');
+                bool success;
+                if (lan.Length > 1)
+                {
+                    int index;
+                    success = Int32.TryParse(lan[0], out index);
+                    Index = success ? index : -1;
+                    Name = lan[1];
+                }
+                
                 SystemLanguage lanuageType;
-                bool success = Enum.TryParse<SystemLanguage>(Name, out lanuageType);
+                success = Enum.TryParse(Name, true, out lanuageType);
                 Type = success ? lanuageType : SystemLanguage.Unknown;
             }
         }
@@ -64,10 +65,6 @@ namespace GRTools.Localization
     public class LocalizationManager
     {
         private const string KLocalizeKey = "GR_Localization_Current_Language";
-        private const string KLocalizeFolder = "Localization";
-        private const string KLocalizeImagesPath = "/Sprites";
-        private const string KLocalizeDefaultImagesPath = "/Sprites/_Default";
-        
         public delegate void LocalizationChangeHandler(LocalizationFile localizationFile);
         
         /// <summary>
@@ -80,26 +77,21 @@ namespace GRTools.Localization
         /// 本地化文件列表
         /// </summary>
         public LocalizationFile[] FileList { private set; get; }
+
+        /// <summary>
+        /// 多语言资源加载器
+        /// </summary>
+        public ILocalizationLoader loader;
+
+        /// <summary>
+        /// 多语言文本文件解析器
+        /// </summary>
+        public ILocalizationParser parser;
         
         /// <summary>
-        /// 本地化文件类型
+        /// 是否正在读取多语言文本文件
         /// </summary>
-        public LocalizationFileType FileType { private set; get; }
-        
-        /// <summary>
-        /// 本地化文件路径
-        /// </summary>
-        public string FilePath { private set; get; }
-        
-        /// <summary>
-        /// 本地化默认图片路径，默认 'Localization/Sprites/_Default' 或 '初始化配置目录/Sprites/_Default'
-        /// </summary>
-        public string DefaultImagesPath;
-        
-        /// <summary>
-        /// 本地化图片路径，默认 'Localization/Sprites' 或 '初始化配置目录/Sprites'
-        /// </summary>
-        public string ImagesPath;
+        public bool IsLoading { private set; get; }
 
         /// <summary>
         /// 警告缺失键值
@@ -161,123 +153,179 @@ namespace GRTools.Localization
         /// <param name="defaultLanguage">无选择语言，且不跟随系统时默认语言</param>
         /// <param name="filesPath">多语言文件目录，默认 'Localization'</param>
         /// <param name="fileType">多语言文件类型，默认 CSV</param>
-        public static void Init(bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English, string filesPath = KLocalizeFolder, LocalizationFileType fileType = LocalizationFileType.Csv)
+        public static void Init(ILocalizationLoader fileLoader, ILocalizationParser fileParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
         {
             if (_singleton == null)
             {
-                _singleton = new LocalizationManager(followSystem, defaultLanguage, filesPath, fileType);
+                _singleton = new LocalizationManager(fileLoader, fileParser, followSystem, defaultLanguage);
+            }
+        }
+        
+        public static void Init(ILocalizationLoader fileLoader, LocalizationFileType fileType = LocalizationFileType.Csv, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
+        {
+            if (_singleton == null)
+            {
+                ILocalizationParser parser = new LocalizationDefaultParser(fileType);
+                _singleton = new LocalizationManager(fileLoader, parser, followSystem, defaultLanguage);
+            }
+        }
+        public static void Init(LocalizationFileType fileType = LocalizationFileType.Csv, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
+        {
+            if (_singleton == null)
+            {
+                ILocalizationParser parser = new LocalizationDefaultParser(fileType);
+                _singleton = new LocalizationManager(null, parser, followSystem, defaultLanguage);
+            }
+        }
+        
+        public static void Init(bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
+        {
+            if (_singleton == null)
+            {
+                _singleton = new LocalizationManager(null, null, followSystem, defaultLanguage);
             }
         }
 
-        private LocalizationManager(bool followSystem, SystemLanguage defaultLanguage, string filesPath = KLocalizeFolder, LocalizationFileType fileType = LocalizationFileType.Csv)
+        private LocalizationManager(ILocalizationLoader fileLoader, ILocalizationParser fileParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
         {
             _followSystem = followSystem;
             _defaultLanguage = defaultLanguage;
-
-            if (string.IsNullOrEmpty(filesPath))
+            loader = fileLoader;
+            
+            if (fileLoader == null)
             {
-                filesPath = KLocalizeFolder;
-            }
-            else if (filesPath.EndsWith("/"))
-            {
-                filesPath = filesPath.Remove(filesPath.Length - 1);
+                loader = new LocalizationAssetBundleLoader();
             }
 
-            ImagesPath = filesPath + KLocalizeImagesPath;
+            if (fileParser == null)
+            {
+                parser = new LocalizationDefaultParser();
+            }
 
-            DefaultImagesPath = filesPath + KLocalizeDefaultImagesPath;
             //获取语言列表
-            LoadAllLocalizationFilesData(filesPath, fileType);
+            LoadAllLocalizationFilesData(null, fileParser);
         }
 
         /// <summary>
-        /// 获取目标路径下语言文件列表，图片资源路径不会更改
+        /// 获取目标路径下语言文件列表，可修改加载器和解析器
         /// </summary>
-        /// <param name="filesPath">存储语言文件的路径</param>
-        /// <param name="fileType">语言文件类型</param>
-        public void LoadAllLocalizationFilesData(string filesPath, LocalizationFileType fileType = LocalizationFileType.Csv)
+        /// <param name="fileLoader"></param>
+        /// <param name="fileParser"></param>
+        public void LoadAllLocalizationFilesData(ILocalizationLoader fileLoader = null, ILocalizationParser fileParser = null)
         {
-            FilePath = filesPath;
-            FileType = fileType;
+            if (fileLoader != null)
+            {
+                loader = fileLoader;
+            }
+            
+            if (fileParser != null)
+            {
+                parser = fileParser;
+            }
+            
             SystemLanguage savedLanguageType = (SystemLanguage)PlayerPrefs.GetInt(KLocalizeKey, _followSystem ? (int)SystemLanguageType : (int)_defaultLanguage);
             
-            TextAsset[] res = Resources.LoadAll<TextAsset>(FilePath);
+            _currentFile = new LocalizationFile(savedLanguageType);
+            FileList = new LocalizationFile[0];
             
-            if (res.Length > 0)
+            loader.LoadAllFileListAsync(files =>
             {
-                int defaultIndex = -1;
-                LocalizationFile[] fileList = new LocalizationFile[res.Length];
-                for (int i = 0; i < res.Length; i++)
+                FileList = files;
+
+                if (files.Length > 0)
                 {
-                    TextAsset asset = res[i];
-                    LocalizationFile data = new LocalizationFile(asset.name);
-                    fileList[i] = data;
-                    if (_currentFile.FileName == null && data.Type == savedLanguageType)
+                    int defaultIndex = -1;
+                    for (int i = 0; i < files.Length; i++)
                     {
-                        _currentFile = data;
+                        if (_currentFile.FileName == null && files[i].Type == savedLanguageType)
+                        {
+                            _currentFile = files[i];
+                        }
+
+                        if (defaultIndex == -1 && files[i].Type == _defaultLanguage)
+                        {
+                            defaultIndex = i;
+                        }
                     }
-        
-                    if (defaultIndex == -1 && data.Type == _defaultLanguage)
+                    //若无选中语言则依据系统语言，若无系统语言则默认第一个
+                    if (_currentFile.FileName == null)
                     {
-                        defaultIndex = i;
+                        if (defaultIndex > -1)
+                        {
+                            _currentFile = files[defaultIndex];
+                        }
+                        else
+                        {
+                            _currentFile = FileList[0];
+                        }
                     }
-                    
-                    Resources.UnloadAsset(asset);
+
+                    LoadLocalizationDict(_currentFile.FileName, null);
                 }
-        
-                FileList = fileList;
-        
-                //若无选中语言则依据系统语言，若无系统语言则默认第一个
-                if (_currentFile.FileName == null)
-                {
-                    if (defaultIndex > -1)
-                    {
-                        _currentFile = FileList[defaultIndex];
-                    }
-                    else
-                    {
-                        _currentFile = FileList[0];
-                    }
-                }
-        
-                LoadLocalizationDict(_currentFile.FileName);
-                
-                if (LocalizationChangeEvent != null)
-                {
-                    LocalizationChangeEvent(CurrentLocalizationFile);
-                }
-            }
-            else
-            {
-                _currentFile = new LocalizationFile(savedLanguageType);
-                FileList = new LocalizationFile[0];
-            }
+            });
         }
 
         /// <summary>
         /// 加载并解析语言文件
         /// </summary>
         /// <param name="fileName">文件名</param>
-        private void LoadLocalizationDict(string fileName)
+        /// <param name="complete">加载成功回调</param>
+        private void LoadLocalizationDict(string fileName, Action<bool> success)
         {
-            TextAsset asset = Resources.Load<TextAsset>(FilePath + "/" + fileName);
-            if (asset == null)
+            IsLoading = true;
+            loader.LoadAssetAsync<TextAsset>(fileName,fileName, false,textAsset =>
             {
-                Debug.LogError("Localization: no localizefile " + fileName);
-                asset = Resources.Load<TextAsset>(FilePath + "/" + FileList[0].FileName);
-            }
+                if (textAsset == null)
+                {
+                    Debug.LogError("Localization: no localizefile " + fileName);
+                    loader.LoadAssetAsync<TextAsset>(FileList[0].FileName, FileList[0].FileName, false,defaultTextAsset =>
+                    {
+                        if (defaultTextAsset != null)
+                        {
+                            Parse(defaultTextAsset.text);
+                        }
+                        else if (success != null)
+                        {
+                            success(false);
+                        }
+                    });
+                }
+                else
+                {
+                    Parse(textAsset.text);
+                }
+            });
 
-            Dictionary<string, string> dict = LocalizationParser.Parse(asset.text, FileType);
-            
-            Resources.UnloadAsset(asset);
-
-            if (_localDict != null)
+            void Parse(string text)
             {
-                _localDict.Clear();
-                _localDict = null;
+                Dictionary<string, string> dict = parser.Parse(text);
+                if (dict != null)
+                {
+                    if (_localDict != null)
+                    {
+                        _localDict.Clear();
+                        _localDict = null;
+                    }
+                    _localDict = dict;
+                    
+                    if (success != null)
+                    {
+                        success(true);
+                    }
+                    
+                    if (LocalizationChangeEvent != null)
+                    {
+                        LocalizationChangeEvent(CurrentLocalizationFile);
+                    }
+                    
+                }
+                else
+                {
+                    success?.Invoke(false);
+                }
+
+                IsLoading = false;
             }
-            
-            _localDict = dict;
         }
 
         /// <summary>
@@ -307,43 +355,39 @@ namespace GRTools.Localization
             PlayerPrefs.Save();
         }
 
-        
+
         /// <summary>
         /// 根据 LocalizationFileList index 更换语言
         /// </summary>
         /// <param name="index"></param>
-        /// <returns>是否替换成功</returns>
-        public bool ChangeToLanguage(int index)
+        /// <param name="success">切换成功回调</param>
+        public void ChangeToLanguage(int index, Action<bool> success)
         {
             if (FileList.Length > 0 && FileList.Length > index && index >= 0)
             {
                 CurrentLocalizationFile = FileList[index];
-                LoadLocalizationDict(CurrentLocalizationFile.FileName);
-                if (LocalizationChangeEvent != null)
-                {
-                    LocalizationChangeEvent(CurrentLocalizationFile);
-                }
-
-                return true;
+                LoadLocalizationDict(CurrentLocalizationFile.FileName, success);
             }
-
-            return false;
+            else if (success != null)
+            {
+                success(true);
+            }
         }
 
         /// <summary>
         /// 根据语言类型更换语言
         /// </summary>
         /// <param name="language"></param>
-        /// <returns>是否替换成功</returns>
-        public bool ChangeToLanguage(SystemLanguage language)
+        /// <param name="success">切换成功回调</param>
+        public void ChangeToLanguage(SystemLanguage language, Action<bool> success)
         {
             if (language == SystemLanguage.Chinese)
             {
                 language = SystemLanguage.ChineseSimplified;
             }
                 
-            int index = IndexOfLanguage(language);
-            return ChangeToLanguage(index);
+            int index = IndexOfLanguage(language); 
+            ChangeToLanguage(index, success);
         }
 
         /// <summary>
@@ -366,41 +410,41 @@ namespace GRTools.Localization
             return _localDict[key];
         }
 
-        /// <summary>
-        /// 使用协程异步加载当前语言图片路径或默认路径下的图片，回调传回
-        /// </summary>
-        /// <param name="imageName">图片名称</param>
-        /// <param name="defaultImageName">默认图片名称</param>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public IEnumerator GetLocalizedSpriteByNameAsync(string spriteName, string defaultSpriteName, Action<Sprite> callback)
+        public void LoadLocalizationAssetAsync<T>(string assetPath, string defaultAssetPath, Action<T> callback) where T : UnityEngine.Object
         {
-            ResourceRequest request =
-                Resources.LoadAsync<Sprite>(ImagesPath + "/" + CurrentLocalizationFile.Name + "/" + spriteName);
-            yield return request;
-            Sprite image = request.asset as Sprite;
-            if (image == null)
+            loader.LoadAssetAsync<T>(CurrentLocalizationFile.FileName, assetPath, false,asset =>
             {
-                if (WarnMissedValue)
+                if (asset == null)
                 {
-                    Debug.LogWarning("Localization: Miss localized image: " + spriteName);
-                }
+                    if (WarnMissedValue)
+                    {
+                        Debug.LogWarning("Localization: Miss asset '" + assetPath + "'");
+                    }
 
-                request =
-                    Resources.LoadAsync<Sprite>(DefaultImagesPath + "/" + defaultSpriteName);
-                yield return request;
-                image = request.asset as Sprite;
-                
-                if (WarnMissedValue)
+                    if (!string.IsNullOrEmpty(defaultAssetPath))
+                    {
+                        loader.LoadAssetAsync<T>(CurrentLocalizationFile.FileName, defaultAssetPath, true,defaultAsset =>
+                        {
+                            if (WarnMissedValue && defaultAsset == null)
+                            {
+                                Debug.LogWarning("Localization: Miss asset '" + defaultAssetPath + "'");
+                            }
+                            if (callback != null)
+                            {
+                                callback(defaultAsset);
+                            }
+                        });
+                    }
+                    else if (callback != null)
+                    {
+                        callback(asset);
+                    }
+                }
+                else if (callback != null)
                 {
-                    Debug.LogWarning("Localization: Miss localized default image: " + defaultSpriteName);
+                    callback(asset);
                 }
-            }
-
-            if (callback != null)
-            {
-                callback(image);
-            }
+            });
         }
     }
 }

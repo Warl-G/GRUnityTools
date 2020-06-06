@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 2167029203
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 81e0605ab0cd2c5f0a199d6193417acd
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: aa08a4addced3caa22a4c905891ce907
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/LocalizationSample/LocalizationAssets/0.English/0.English.txt
+- Assets/LocalizationSample/LocalizationAssets/0.English/Assets/Sample_Image_English.jpg
+Dependencies: []

@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1508802797
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: 0.english
+      Dependencies: {}
+    Info_1:
+      Name: 1.chinesesimplified
+      Dependencies: {}
+    Info_2:
+      Name: 2.french
+      Dependencies: {}
+    Info_3:
+      Name: common
+      Dependencies: {}

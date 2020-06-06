@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1677093062
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 811b6ab38a2774cf3b2ae23f08d1c044
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+Assets:
+- Assets/LocalizationSample/LocalizationAssets/2.French/2.French.txt
+Dependencies: []
