@@ -14,13 +14,13 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 ### TaskQueue   
 
-[文档](https://github.com/Warl-G/GRUnityTools/blob/master/Assets/GRTools/Documents/TaskQueue.md)，[编写教程](https://warl.top/posts/unity-taskqueue/)   
+[文档](Documents/TaskQueue.md)，[编写教程](https://warl.top/posts/unity-taskqueue/)   
 
 一个实现了同步串行、异步串行、同步并行、异步并行的多线程任务队列工具  
 
 ### Localization
 
-[文档](https://github.com/Warl-G/GRUnityTools/blob/master/Assets/GRTools/Documents/Localization.md)
+[文档](Documents/Localization.md)
 
 自己写的多语言工具，无需修改代码即可扩充支持语言，有极强的可扩展性，可自定义文件加载、解析方式  
 
@@ -32,6 +32,6 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 ### SqliteHelper  
 
-[文档](https://github.com/Warl-G/GRUnityTools/tree/master/Assets/GRTools/Documents/SqliteHelper.md)
+[文档](Documents/SqliteHelper.md)
 
 使用 Mono.Sqlite.Data 和 TaskQueue 制作的数据库快捷操作和操作队列工具
