@@ -1,20 +1,39 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using GRTools.Localization;
-using GRTools.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LocalizationSample : MonoBehaviour
 {
     [SerializeField] private Text languageList;
+    [SerializeField] private LoaderType loaderType;
+    public enum LoaderType
+    {
+        Resources,
+        AssetBudnle,
+        Addressable
+    }
     
     private int index = 0;
 
     private void Awake()
     {
-        LocalizationManager.Init(true, SystemLanguage.ChineseSimplified, "", LocalizationFileType.Txt);
+        ILocalizationLoader loader = null;
+        if (loaderType == LoaderType.Resources)
+        {
+            loader = new LocalizationResourcesLoader();
+        }
+        else if (loaderType == LoaderType.AssetBudnle)
+        {
+            loader = new LocalizationAssetBundleLoader();
+        }
+        else if (loaderType == LoaderType.Addressable)
+        {
+            loader = new LocalizationAddressableLoader();
+        }
+        // var loader = new LocalizationResourcesLoader();
+        
+        LocalizationManager.Init(loader, LocalizationFileType.Txt);
         index = LocalizationManager.Singleton.CurrentLanguageIndex;
     }
 
@@ -28,19 +47,18 @@ public class LocalizationSample : MonoBehaviour
     {
         index++;
         index = index >= LocalizationManager.Singleton.FileList.Length ? 0 : index;
-        LocalizationManager.Singleton.ChangeToLanguage(index);
+        LocalizationManager.Singleton.ChangeToLanguage(index, null);
         UpdateList();
-
     }
 
     public void ChangeToCsv()
     {
-        LocalizationManager.Singleton.LoadAllLocalizationFilesData("Csv");
+        // LocalizationManager.Singleton.LoadAllLocalizationFilesData("Csv");
     }
     
     public void ChangeToJson()
     {
-        LocalizationManager.Singleton.LoadAllLocalizationFilesData("Json", LocalizationFileType.Json);
+        // LocalizationManager.Singleton.LoadAllLocalizationFilesData("Json", LocalizationFileType.Json);
     }
 
     private void UpdateList()

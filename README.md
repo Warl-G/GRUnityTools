@@ -14,7 +14,7 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 ### TaskQueue   
 
-[文档](https://github.com/Warl-G/GRUnityTools/blob/master/Assets/GRTools/Documents/ThreadQueue.md)，[编写教程](https://warl.top/posts/unity-taskqueue/)   
+[文档](https://github.com/Warl-G/GRUnityTools/blob/master/Assets/GRTools/Documents/TaskQueue.md)，[编写教程](https://warl.top/posts/unity-taskqueue/)   
 
 一个实现了同步串行、异步串行、同步并行、异步并行的多线程任务队列工具  
 

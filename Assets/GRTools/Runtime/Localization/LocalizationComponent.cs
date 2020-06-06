@@ -48,9 +48,9 @@ namespace GRTools.Localization
                         value = item.defaultValue;
                     }
 
-                    if (item.component.GetType() == typeof(Text))
+                    if (item.component is Text text)
                     {
-                        ((Text)item.component).text = value;
+                        text.text = value;
                     }
                     else if (item.component is TextMesh mesh)
                     {
@@ -58,34 +58,34 @@ namespace GRTools.Localization
                     }
                     else
                     {
-                        Image imageComponent = null;
+                        Image image = null;
                         SpriteRenderer spriteRenderer = null;
 
-                        if (item.component.GetType() == typeof(Image))
+                        if (item.component is Image imageComponent)
                         {
-                            imageComponent = (Image) item.component;
+                            image = imageComponent;
                             if (item.originalImageSize == Vector2.zero)
                             {
-                                item.originalImageSize = imageComponent.rectTransform.sizeDelta;
+                                item.originalImageSize = image.rectTransform.sizeDelta;
                             }
                         }
 
-                        if (item.component is SpriteRenderer component)
+                        if (item.component is SpriteRenderer rendererComponent)
                         {
-                            spriteRenderer = component;
+                            spriteRenderer = rendererComponent;
                         }
 
-                        if (imageComponent != null || spriteRenderer != null)
+                        if (image != null || spriteRenderer != null)
                         {
                             //替换图片
-                            StartCoroutine(LocalizationManager.Singleton.GetLocalizedSpriteByNameAsync(value, item.defaultValue,
+                            LocalizationManager.Singleton.LoadLocalizationAssetAsync(value, item.defaultValue,
                                 delegate(Sprite sprite)
                                 {
                                     if (sprite != null)
                                     {
-                                        if (imageComponent != null)
+                                        if (image != null)
                                         {
-                                            Image img = ((Image) item.component);
+                                            Image img = (Image) item.component;
                                             img.sprite = sprite;
                                             if (item.setNativeSize)
                                             {
@@ -93,7 +93,7 @@ namespace GRTools.Localization
                                             }
                                             else
                                             {
-                                                imageComponent.rectTransform.sizeDelta = item.originalImageSize;
+                                                image.rectTransform.sizeDelta = item.originalImageSize;
                                             }
                                         }
 
@@ -102,8 +102,7 @@ namespace GRTools.Localization
                                             spriteRenderer.sprite = sprite;
                                         }
                                     }
-                                })
-                            );
+                                });
                         }
                     }
                 }

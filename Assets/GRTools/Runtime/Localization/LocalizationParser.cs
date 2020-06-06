@@ -5,27 +5,50 @@ using Newtonsoft.Json;
 
 namespace GRTools.Localization
 {
-    public class LocalizationParser
+    /// <summary>
+    /// 可解析类型
+    /// </summary>
+    public enum LocalizationFileType
     {
+        Txt,
+        Csv,
+        Json
+    }
+    public interface ILocalizationParser
+    {
+        /// <summary>
+        /// 文本解析
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        Dictionary<string, string> Parse(string text);
+    }
+    public class LocalizationDefaultParser : ILocalizationParser
+    {
+        public LocalizationFileType parseType = LocalizationFileType.Csv;
+
+        public LocalizationDefaultParser(LocalizationFileType type = LocalizationFileType.Csv)
+        {
+            parseType = type;
+        }
         /// <summary>
         /// 解析本地化文本
         /// </summary>
         /// <param name="text">本地化文本</param>
-        /// <param name="type">本地化文件类型</param>
         /// <returns></returns>
-        public static Dictionary<string, string> Parse(string text, LocalizationFileType type = LocalizationFileType.Csv)
+        public Dictionary<string, string> Parse(string text)
         {
-            if (type == LocalizationFileType.Csv)
+            if (parseType == LocalizationFileType.Csv)
             {
                 return ParseCsv(text);
             }
             
-            if (type == LocalizationFileType.Txt)
+            if (parseType == LocalizationFileType.Txt)
             {
                 return ParseTxt(text);
             }
 
-            if (type == LocalizationFileType.Json)
+            if (parseType == LocalizationFileType.Json)
             {
                 return ParseJson(text);
             }
@@ -38,7 +61,7 @@ namespace GRTools.Localization
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
-        public static Dictionary<string, string> ParseTxt(string txt)
+        public Dictionary<string, string> ParseTxt(string txt)
         {
             if (string.IsNullOrEmpty(txt))
             {
@@ -67,7 +90,7 @@ namespace GRTools.Localization
         /// </summary>
         /// <param name="csv"></param>
         /// <returns></returns>
-        public static Dictionary<string, string> ParseCsv(string csv)
+        public Dictionary<string, string> ParseCsv(string csv)
         {
             if (string.IsNullOrEmpty(csv))
             {
@@ -87,7 +110,12 @@ namespace GRTools.Localization
             return localDict;
         }
 
-        public static Dictionary<string, string> ParseJson(string json)
+        /// <summary>
+        /// 解析本地化 json 文本
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public Dictionary<string, string> ParseJson(string json)
         {
             if (string.IsNullOrEmpty(json))
             {
