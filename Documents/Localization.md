@@ -199,7 +199,7 @@ LocalizationAssetBundleLoader 使用 AssetBundle 管理本地化资源，该 Loa
 
 使用上述两种方式打包，需将本地化资源放入统一路径，并遵循上方【**命名规范**】创建不同语言路径，放入相应资源，文本文件需和路径同名
 
-快捷打包会使用文件夹名称分别打包成每种语言的 AssetBundle，存于 StreamingAssets/Localization 目录下，运行时加载支持语言列表和加载语言文本均依据该目录下 AssetBundle 名称，该路径可通过修改`FilesPath`属性，修改默认路径
+快捷打包会使用文件夹名称分别打包成每种语言的 AssetBundle，会依据选择的目录最后一级目录名称，存于 StreamingAssets 目录下，运行时加载支持语言列表和加载语言文本均依据该目录下 AssetBundle 名称，该路径可通过修改`FilesPath`属性，修改默认路径
 
 同时还提供公共资源路径属性`CommonAssetsPath`，默认值为`Common`，即与语言目录同级的`Common`目录用于打包多语言通用资源  
 
@@ -207,7 +207,7 @@ UnloadLastLocalizationBundle 属性，是否在加载新的语言 AssetBundle �
 
 若使用 `LocalizationComponent`自动更新，因 AssetBundle 不区分路径，文本中配置资源名即可
 
-例： 
+例选择 Localization 目录作为资源目录进行打包，则 AssetBundle 会打包在 StreamingAssets下的 Localization 目录  
 
 ```
 Assets/Localization/0.English/0.English.txt
