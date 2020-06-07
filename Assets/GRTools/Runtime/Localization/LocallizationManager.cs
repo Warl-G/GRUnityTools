@@ -190,20 +190,19 @@ namespace GRTools.Localization
         {
             _followSystem = followSystem;
             _defaultLanguage = defaultLanguage;
-            loader = fileLoader;
-            
+
             if (fileLoader == null)
             {
-                loader = new LocalizationAssetBundleLoader();
+                fileLoader = new LocalizationAssetBundleLoader();
             }
 
             if (fileParser == null)
             {
-                parser = new LocalizationDefaultParser();
+                fileParser = new LocalizationDefaultParser();
             }
 
             //获取语言列表
-            LoadAllLocalizationFilesData(null, fileParser);
+            LoadAllLocalizationFilesData(fileLoader, fileParser);
         }
 
         /// <summary>

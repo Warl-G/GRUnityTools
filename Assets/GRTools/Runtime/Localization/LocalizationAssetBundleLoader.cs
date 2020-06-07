@@ -29,7 +29,7 @@ namespace GRTools.Localization
 
                 var loadrequest = AssetBundle.LoadFromFileAsync(bundlePath);
                 loadrequest.completed += operation =>
-                {
+                { 
                     AssetBundleManifest manifest =
                         loadrequest.assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
                     var files = manifest.GetAllAssetBundles();
@@ -167,19 +167,20 @@ namespace GRTools.Localization
 
             if (paths.Length > 0)
             {
+                var parent = Path.GetFileName(localizationFilePath);
+                
                 if (!AssetDatabase.IsValidFolder("Assets/StreamingAssets"))
                 {
                     AssetDatabase.CreateFolder("Assets", "StreamingAssets");
                 }
 
-                if (!AssetDatabase.IsValidFolder("Assets/StreamingAssets/" + KLocalizeFolder))
+                if (!AssetDatabase.IsValidFolder("Assets/StreamingAssets/" + parent))
                 {
-                    AssetDatabase.CreateFolder("Assets/StreamingAssets", KLocalizeFolder);
+                    AssetDatabase.CreateFolder("Assets/StreamingAssets", parent);
                 }
-
-                //TODO: 区分平台
-                BuildPipeline.BuildAssetBundles("Assets/StreamingAssets/" + KLocalizeFolder, buildMap,
-                    BuildAssetBundleOptions.ChunkBasedCompression, target);
+                
+                
+                BuildPipeline.BuildAssetBundles("Assets/StreamingAssets/" + parent, buildMap, BuildAssetBundleOptions.ChunkBasedCompression, target);
             }
         }
 

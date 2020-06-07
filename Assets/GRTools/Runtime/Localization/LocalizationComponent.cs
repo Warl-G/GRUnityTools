@@ -12,7 +12,6 @@ namespace GRTools.Localization
         [Tooltip("本地化默认值（文本，图片名称）")] public string defaultValue;
         [Tooltip("是否设置图片原始尺寸")] public bool setNativeSize;
         internal Vector2 originalImageSize = Vector2.zero;
-
     }
     
     public class LocalizationComponent : MonoBehaviour
