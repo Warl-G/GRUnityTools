@@ -5,5 +5,8 @@
   "description": "A Unity Tools Package",
   "author": "Warl-G",
   "license": "MIT",
-  "unity": "2019.3"
+  "unity": "2019.3",
+  "dependencies": {
+  	"com.unity.nuget.newtonsoft-json" : "2.0.0"
+  }
 }
