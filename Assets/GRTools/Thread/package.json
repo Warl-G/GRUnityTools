@@ -1,0 +1,20 @@
+{
+  "name": "com.warlg.grtools.thread",
+  "displayName": "GRTools.Thread",
+  "version": "1.0.0",
+  "description": "GRTools 多线程队列工具\nmore info : https://github.com/Warl-G/GRUnityTools",
+  "license": "MIT",
+  "unity": "2019.3",
+  "dependencies": {
+  },
+  "keywords": [
+    "Thread",
+    "Task",
+    "Queue"
+  ],
+  "author": {
+    "name": "Warl-G",
+    "email": "guoru123@sina.com",
+    "url": "https://warl-g.github.io/"
+  }
+}
