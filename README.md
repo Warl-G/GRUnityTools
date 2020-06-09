@@ -5,12 +5,14 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 2020.6.10 更新：
 
-由于各个工具功能比较独立，版本更新也不同步，现已将 GRUnityTools 拆分，现可根据需求选择性引用各模块，GRUnityTools 统一版本号作废，各模块独立拥有版本号，从1.0.0 开始
+由于各个工具功能比较独立，版本更新也不同步，现已将 GRUnityTools 拆分，现可根据需求选择性引用各模块，GRUnityTools 统一版本号作废，各模块独立拥有版本号，从1.0.0 开始  
+
+由于 Unity 目前还不支持依赖内部的自动下载，因此模块之间依赖 upm 地址需手动添加在项目 Manifest.json 中
 
 ## 集成方式
 
 1. 直接下载源码放入项目中使用，注意模块间的引用
-2. 使用 upm 导入项目，upm格式：`"com.warlg.grtools.[模块名]": "https://github.com/Warl-G/GRUnityTools.git#[模块名]@[版本号]"`，@[版本号] 为可选字段
+2. 使用 upm 导入项目，upm格式：`"com.warlg.grtools.[模块名]": "https://github.com/Warl-G/GRUnityTools.git#[模块名]@[版本号]"`，@[版本号] 为可选字段，需加入依赖模块的 upm 地址
 
 ## 文档  
 
@@ -50,7 +52,7 @@ GRTools 的线程工具包
 
 Ver.1.0.0 | `"com.warlg.grtools.localization": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization@1.0.0"`
 
-GRTools 的本地化工具包
+GRTools 的本地化工具包，需引用 GRTools.Utils  
 
 [文档](Assets/GRTools/Localization/Documentation~/Localization.md)、[编写教程](https://warl-g.github.io/posts/Unity-Localization/)
 
@@ -66,7 +68,7 @@ GRTools 的本地化工具包
 
 Ver.1.0.0 | `"com.warlg.grtools.localization.addressable": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Addressable@1.0.0"`
 
-GRTools 的本地化工具的扩展包  
+GRTools 的本地化工具的扩展包，需引用 GRTools.Localization   
 
 为本地化资源加载扩展 Addressable 支持，详见`GRTools.Localization`
 
@@ -74,6 +76,6 @@ GRTools 的本地化工具的扩展包
 
 Ver.1.0.0 | `"com.warlg.grtools.sqlite": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Sqlite@1.0.0"`
 
-[文档](Assets/GRTools/DataBase/Sqlite/Documentation~/SqliteHelper.md)
+[文档](Assets/GRTools/DataBase/Sqlite/Documentation~/SqliteHelper.md)，，需引用 GRTools.Thread
 
 对 `Mono.Sqlite.Data` 的二次封装和配合 `TaskQueue` 制作的数据库快捷操作和操作队列工具

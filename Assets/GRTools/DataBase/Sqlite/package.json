@@ -2,12 +2,12 @@
   "name": "com.warlg.grtools.sqlite",
   "displayName": "GRTools.Sqlite",
   "version": "1.0.0",
-  "description": "GRTools 的Sqlite串行操作工具\nmore info : https://github.com/Warl-G/GRUnityTools",
+  "description": "GRTools 的Sqlite串行操作工具\n引用'com.warlg.grtools.thread'\nmore info : https://github.com/Warl-G/GRUnityTools",
   "author": "Warl-G",
   "license": "MIT",
   "unity": "2019.3",
   "dependencies": {
-  	"com.warlg.grtools.thread" : "https://github.com/Warl-G/GRUnityTools.git#GRTools.Thread@1.0.0"
+  	"com.warlg.grtools.thread" : "1.0.0"
   },
   "keywords": [
     "Database",
