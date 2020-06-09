@@ -1,0 +1,15 @@
+{
+    "name": "GRTools.Localization.Runtime",
+    "references": [
+        "GUID:598828afcde964f62969fca3ebebd625"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
