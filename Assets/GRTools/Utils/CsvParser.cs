@@ -166,7 +166,7 @@ namespace GRTools.Utils
         }
         
         /// <summary>
-        /// 解析行列，每行第一个
+        /// 解析行列，每行第一个字段为一级字典 key，每列第一个字段为二级字典 key
         /// </summary>
         /// <param name="csvString"></param>
         /// <returns></returns>

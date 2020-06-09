@@ -1,0 +1,15 @@
+{
+    "name": "GRTools.Sqlite.Runtime",
+    "references": [
+        "GUID:528cfc2a3cd3f40c3b456c9f12bfd3de"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
