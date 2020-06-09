@@ -2,12 +2,12 @@
   "name": "com.warlg.grtools.localization.addressable",
   "displayName": "GRTools.Localization.Addressable",
   "version": "1.0.0",
-  "description": "GRTools.Localization 支持 Addressable 加载的扩展包，作为, more info : https://github.com/Warl-G/GRUnityTools",
+  "description": "GRTools.Localization 支持 Addressable 加载的扩展包\ncom.warlg.grtools.localization\nmore info : https://github.com/Warl-G/GRUnityTools",
   "author": "Warl-G",
   "license": "MIT",
   "unity": "2019.3",
   "dependencies": {
-  	"com.warlg.grtools.localization" : "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization@1.0.0",
+  	"com.warlg.grtools.localization" : "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization",
     "com.unity.addressables" : "1.9.2"
   },
   "keywords": [
