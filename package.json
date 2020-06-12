@@ -1,13 +1,13 @@
 {
   "name": "com.warlg.grtools.localization",
   "displayName": "GRTools.Localization",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GRTools 本地化工具\n支持自定义资源管理和文本解析\n引用'com.warlg.grtools.utils'\nmore info : https://github.com/Warl-G/GRUnityTools",
   "author": "Warl-G",
   "license": "MIT",
-  "unity": "2019.3",
+  "unity": "2018.3",
   "dependencies": {
-  	"com.warlg.grtools.utils" : "1.0.0"
+  	"com.warlg.grtools.utils" : "1.0.1"
   },
   "keywords": [
     "Localization"
