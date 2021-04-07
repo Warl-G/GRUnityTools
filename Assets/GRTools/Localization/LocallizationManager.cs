@@ -428,20 +428,18 @@ namespace GRTools.Localization
                             {
                                 Debug.LogWarning("Localization: Miss asset '" + defaultAssetPath + "'");
                             }
-                            if (callback != null)
-                            {
-                                callback(defaultAsset);
-                            }
+
+                            callback?.Invoke(defaultAsset);
                         });
                     }
-                    else if (callback != null)
+                    else
                     {
-                        callback(asset);
+                        callback?.Invoke(asset);
                     }
                 }
-                else if (callback != null)
+                else
                 {
-                    callback(asset);
+                    callback?.Invoke(asset);
                 }
             });
         }
