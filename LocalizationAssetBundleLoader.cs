@@ -18,6 +18,7 @@ namespace GRTools.Localization
         /// </summary>
         public bool UnloadLastLocalizationBundle = true;
 
+        private AssetBundleCreateRequest _commonBundleRequest;
         private AssetBundle _assetBundle;
         private AssetBundle _commonBundle;
 
@@ -124,12 +125,16 @@ namespace GRTools.Localization
 
             if (_commonBundle == null)
             {
-                var request =
-                    AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, FilesPath,
-                        CommonAssetsPath));
-                request.completed += operation =>
+                if (_commonBundleRequest == null)
                 {
-                    _commonBundle = request.assetBundle;
+                    _commonBundleRequest =
+                        AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, FilesPath,
+                            CommonAssetsPath));
+                }
+                
+                _commonBundleRequest.completed += operation =>
+                {
+                    _commonBundle = _commonBundleRequest.assetBundle;
                     LoadAsset();
                 };
             }

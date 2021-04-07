@@ -81,12 +81,12 @@ namespace GRTools.Localization
         /// <summary>
         /// 多语言资源加载器
         /// </summary>
-        public ILocalizationLoader loader;
+        public ILocalizationLoader Loader;
 
         /// <summary>
         /// 多语言文本文件解析器
         /// </summary>
-        public ILocalizationParser parser;
+        public ILocalizationParser Parser;
         
         /// <summary>
         /// 是否正在读取多语言文本文件
@@ -214,12 +214,12 @@ namespace GRTools.Localization
         {
             if (fileLoader != null)
             {
-                loader = fileLoader;
+                Loader = fileLoader;
             }
             
             if (fileParser != null)
             {
-                parser = fileParser;
+                Parser = fileParser;
             }
             
             SystemLanguage savedLanguageType = (SystemLanguage)PlayerPrefs.GetInt(KLocalizeKey, _followSystem ? (int)SystemLanguageType : (int)_defaultLanguage);
@@ -227,7 +227,7 @@ namespace GRTools.Localization
             _currentFile = new LocalizationFile(savedLanguageType);
             FileList = new LocalizationFile[0];
             
-            loader.LoadAllFileListAsync(files =>
+            Loader.LoadAllFileListAsync(files =>
             {
                 FileList = files;
 
@@ -272,12 +272,12 @@ namespace GRTools.Localization
         private void LoadLocalizationDict(string fileName, Action<bool> success)
         {
             IsLoading = true;
-            loader.LoadAssetAsync<TextAsset>(fileName,fileName, false,textAsset =>
+            Loader.LoadAssetAsync<TextAsset>(fileName,fileName, false,textAsset =>
             {
                 if (textAsset == null)
                 {
                     Debug.LogError("Localization: no localizefile " + fileName);
-                    loader.LoadAssetAsync<TextAsset>(FileList[0].FileName, FileList[0].FileName, false,defaultTextAsset =>
+                    Loader.LoadAssetAsync<TextAsset>(FileList[0].FileName, FileList[0].FileName, false,defaultTextAsset =>
                     {
                         if (defaultTextAsset != null)
                         {
@@ -297,7 +297,7 @@ namespace GRTools.Localization
 
             void Parse(string text)
             {
-                Dictionary<string, string> dict = parser.Parse(text);
+                Dictionary<string, string> dict = Parser.Parse(text);
                 if (dict != null)
                 {
                     if (_localDict != null)
@@ -411,7 +411,7 @@ namespace GRTools.Localization
 
         public void LoadLocalizationAssetAsync<T>(string assetPath, string defaultAssetPath, Action<T> callback) where T : UnityEngine.Object
         {
-            loader.LoadAssetAsync<T>(CurrentLocalizationFile.FileName, assetPath, false,asset =>
+            Loader.LoadAssetAsync<T>(CurrentLocalizationFile.FileName, assetPath, false,asset =>
             {
                 if (asset == null)
                 {
@@ -422,7 +422,7 @@ namespace GRTools.Localization
 
                     if (!string.IsNullOrEmpty(defaultAssetPath))
                     {
-                        loader.LoadAssetAsync<T>(CurrentLocalizationFile.FileName, defaultAssetPath, true,defaultAsset =>
+                        Loader.LoadAssetAsync<T>(CurrentLocalizationFile.FileName, defaultAssetPath, true,defaultAsset =>
                         {
                             if (WarnMissedValue && defaultAsset == null)
                             {
