@@ -24,17 +24,17 @@ namespace GRTools.Localization
         {
             if (LocalizationManager.Singleton != null)
             {
-                LocalizationChanged(LocalizationManager.Singleton.CurrentLocalizationFile);
+                OnLocalizationChanged(LocalizationManager.Singleton.CurrentLocalizationFile);
             }
-            LocalizationManager.LocalizationChangeEvent += LocalizationChanged;
+            LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;
         }
 
         private void OnDestroy()
         {
-            LocalizationManager.LocalizationChangeEvent -= LocalizationChanged;
+            LocalizationManager.LocalizationChangeEvent -= OnLocalizationChanged;
         }
 
-        private void LocalizationChanged(LocalizationFile localizationFile)
+        private void OnLocalizationChanged(LocalizationFile localizationFile)
         {
             _currentLanguage = localizationFile.Type;
             foreach (var item in items)
@@ -57,21 +57,15 @@ namespace GRTools.Localization
                     }
                     else
                     {
-                        Image image = null;
-                        SpriteRenderer spriteRenderer = null;
+                        Image image = item.component as Image;
+                        SpriteRenderer spriteRenderer = item.component as SpriteRenderer;
 
-                        if (item.component is Image imageComponent)
+                        if (image != null)
                         {
-                            image = imageComponent;
                             if (item.originalImageSize == Vector2.zero)
                             {
                                 item.originalImageSize = image.rectTransform.sizeDelta;
                             }
-                        }
-
-                        if (item.component is SpriteRenderer rendererComponent)
-                        {
-                            spriteRenderer = rendererComponent;
                         }
 
                         if (image != null || spriteRenderer != null)
@@ -84,11 +78,10 @@ namespace GRTools.Localization
                                     {
                                         if (image != null)
                                         {
-                                            Image img = (Image) item.component;
-                                            img.sprite = sprite;
+                                            image.sprite = sprite;
                                             if (item.setNativeSize)
                                             {
-                                                img.SetNativeSize();
+                                                image.SetNativeSize();
                                             }
                                             else
                                             {

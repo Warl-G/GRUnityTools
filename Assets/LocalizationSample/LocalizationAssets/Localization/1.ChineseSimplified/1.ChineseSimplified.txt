@@ -12,4 +12,4 @@ Localization_Sample_Key_6=TXT_6_Chinese \t Localization_Sample_Test_6_Chinese
 
 Localization_Sample_Key_7=Sample_Image_Chinese
 
-
+Localization_Sample_Key_8=UnusedKey
