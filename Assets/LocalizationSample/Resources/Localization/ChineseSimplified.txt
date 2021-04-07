@@ -11,5 +11,3 @@ Localization_Sample_Key_6=TXT_6_Chinese \t Localization_Sample_Test_6_Chinese
 //some comment
 
 Localization_Sample_Key_7=Assets/ChineseSimplified/Sample_Image_Chinese
-
-

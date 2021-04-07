@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using GRTools.Utils;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace GRTools.Localization
 {
@@ -67,7 +68,8 @@ namespace GRTools.Localization
             {
                 return null;
             }
-            string[] lines = txt.Split('\n');
+            
+            string[] lines = txt.Replace("\r\n", "\n").Split('\n');
             Dictionary<string, string> localDict = new Dictionary<string, string>();
             foreach (string line in lines)
             {

@@ -1,5 +1,5 @@
 {
-  "name": "com.warlg.grtools.localization.addressable",
+  "name": "com.warlg.grtools.localization.addressables",
   "displayName": "GRTools.Localization.Addressable",
   "version": "1.0.1",
   "description": "GRTools.Localization 支持 Addressable 加载的扩展包\n引用 'com.warlg.grtools.localization'\nmore info : https://github.com/Warl-G/GRUnityTools",

@@ -11,5 +11,3 @@ Localization_Sample_Key_6=TXT_6 \t Localization_Sample_Test_6
 //some comment
 
 Localization_Sample_Key_7=Assets/English/Sample_Image_English
-
-
