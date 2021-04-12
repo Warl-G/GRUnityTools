@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GRTools.Utils;
 using Newtonsoft.Json;
@@ -15,43 +15,38 @@ namespace GRTools.Localization
         Csv,
         Json
     }
-    public interface ILocalizationParser
-    {
-        /// <summary>
-        /// 文本解析
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        Dictionary<string, string> Parse(string text);
-    }
     public class LocalizationDefaultParser : ILocalizationParser
     {
-        public LocalizationFileType parseType = LocalizationFileType.Csv;
+        public LocalizationFileType ParseType;
 
         public LocalizationDefaultParser(LocalizationFileType type = LocalizationFileType.Csv)
         {
-            parseType = type;
+            ParseType = type;
         }
         /// <summary>
         /// 解析本地化文本
         /// </summary>
-        /// <param name="text">本地化文本</param>
+        /// <param name="textAsset">本地化文本</param>
         /// <returns></returns>
-        public Dictionary<string, string> Parse(string text)
+        public Dictionary<string, string> Parse(Object textAsset)
         {
-            if (parseType == LocalizationFileType.Csv)
+            TextAsset asset = textAsset as TextAsset;
+            if (asset)
             {
-                return ParseCsv(text);
-            }
+                if (ParseType == LocalizationFileType.Csv)
+                {
+                    return ParseCsv(asset.text);
+                }
             
-            if (parseType == LocalizationFileType.Txt)
-            {
-                return ParseTxt(text);
-            }
+                if (ParseType == LocalizationFileType.Txt)
+                {
+                    return ParseTxt(asset.text);
+                }
 
-            if (parseType == LocalizationFileType.Json)
-            {
-                return ParseJson(text);
+                if (ParseType == LocalizationFileType.Json)
+                {
+                    return ParseJson(asset.text);
+                }
             }
 
             return null;

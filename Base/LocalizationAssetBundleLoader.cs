@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace GRTools.Localization
 {
@@ -21,71 +22,69 @@ namespace GRTools.Localization
         private AssetBundleCreateRequest _commonBundleRequest;
         private AssetBundle _assetBundle;
         private AssetBundle _commonBundle;
-
-        public override void LoadAllFileListAsync(Action<LocalizationFile[]> complete)
+        
+        public override void LoadManifestAsync(Action<LocalizationInfo[]> completed)
         {
-            if (complete != null)
+            if (completed != null)
             {
-                string bundlePath = Path.Combine(Application.streamingAssetsPath, FilesPath, FilesPath);
-
-                var loadrequest = AssetBundle.LoadFromFileAsync(bundlePath);
-                loadrequest.completed += operation =>
-                { 
-                    AssetBundleManifest manifest =
-                        loadrequest.assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                    var files = manifest.GetAllAssetBundles();
-
-                    List<LocalizationFile> fileList = new List<LocalizationFile>();
-                    for (int i = 0; i < files.Length; i++)
+                var request = Resources.LoadAsync<LocalizationManifest>(Path.Combine(RootPath, ManifestPath));
+                request.completed += operation =>
+                {
+                    if (operation.isDone)
                     {
-                        if (!files[i].Equals(CommonAssetsPath.ToLower()))
+                        LocalizationInfo[] infoList = (request.asset as LocalizationManifest)?.InfoList;
+                        if (infoList != null)
                         {
-                            LocalizationFile data = new LocalizationFile(files[i]);
-                            fileList.Add(data);
+                            LocalizationInfo[] newInfoList = new LocalizationInfo[infoList.Length];
+                            for (int i = 0; i < infoList.Length; i++)
+                            {
+                                newInfoList[i] = infoList[i];
+                            }
+                            completed(newInfoList);
                         }
+                        Resources.UnloadAsset(request.asset);
                     }
-
-                    loadrequest.assetBundle.Unload(manifest);
-                    complete(fileList.ToArray());
                 };
             }
         }
 
-        public override void LoadAssetAsync<T>(string localizationFileName, string assetPath, bool defaultAsset,
-            Action<T> complete)
+        public override void LoadLocalizationTextAsset(LocalizationInfo info, Action<Object> completed)
         {
-            if (!string.IsNullOrEmpty(localizationFileName) && !string.IsNullOrEmpty(assetPath) && complete != null)
+            LoadLocalizationBundle(info.AssetsPath, info.TextAssetPath, completed);
+        }
+
+        public override void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, bool defaultAsset, Action<TAsset> completed)
+        {
+            if (!string.IsNullOrEmpty(assetName) && completed != null)
             {
                 if (defaultAsset)
                 {
-                    LoadCommonBundle(assetPath, complete);
+                    LoadCommonBundle(assetName, completed);
                 }
                 else
                 {
-                    LoadLocalizationBundle(localizationFileName, assetPath, complete);
+                    LoadLocalizationBundle(info.AssetsPath, assetName, completed);
                 }
             }
         }
 
-        private void LoadLocalizationBundle<T>(string localizationFileName, string assetPath, Action<T> complete)
-            where T : UnityEngine.Object
+        private void LoadLocalizationBundle<TAsset>(string assetsPath, string assetName, Action<TAsset> complete) where TAsset : Object
         {
             void LoadAsset()
             {
                 if (_assetBundle != null)
                 {
-                    var request = _assetBundle.LoadAssetAsync<T>(assetPath);
-                    request.completed += asyncOperation => { complete(request.asset as T); };
+                    var request = _assetBundle.LoadAssetAsync<TAsset>(assetName);
+                    request.completed += asyncOperation => { complete(request.asset as TAsset); };
                 }
             }
 
             AssetBundleCreateRequest loadrequest = null;
             if (_assetBundle == null)
             {
-                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, FilesPath,
-                    localizationFileName));
+                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, RootPath, assetsPath));
             }
-            else if (!_assetBundle.name.Equals(localizationFileName))
+            else if (!_assetBundle.name.Equals(assetsPath))
             {
                 //加载新语言包，则卸载旧语言包，可能导致部分资源缺失
                 if (UnloadLastLocalizationBundle)
@@ -94,16 +93,18 @@ namespace GRTools.Localization
                     _assetBundle = null;
                 }
                 
-                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, FilesPath,
-                    localizationFileName));
+                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, RootPath, assetsPath));
             }
 
             if (loadrequest != null)
             {
                 loadrequest.completed += operation =>
                 {
-                    _assetBundle = loadrequest.assetBundle;
-                    LoadAsset();
+                    if (loadrequest.assetBundle.name == assetsPath)
+                    {
+                        _assetBundle = loadrequest.assetBundle;
+                        LoadAsset();
+                    }
                 };
             }
             else
@@ -112,14 +113,14 @@ namespace GRTools.Localization
             }
         }
 
-        private void LoadCommonBundle<T>(string assetPath, Action<T> complete) where T : UnityEngine.Object
+        private void LoadCommonBundle<TAsset>(string assetPath, Action<TAsset> complete) where TAsset : Object
         {
             void LoadAsset()
             {
                 if (_commonBundle != null)
                 {
-                    var request = _commonBundle.LoadAssetAsync<T>(assetPath);
-                    request.completed += asyncOperation => { complete(request.asset as T); };
+                    var request = _commonBundle.LoadAssetAsync<TAsset>(assetPath);
+                    request.completed += asyncOperation => { complete(request.asset as TAsset); };
                 }
             }
 
@@ -128,13 +129,17 @@ namespace GRTools.Localization
                 if (_commonBundleRequest == null)
                 {
                     _commonBundleRequest =
-                        AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, FilesPath,
+                        AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, RootPath,
                             CommonAssetsPath));
                 }
                 
                 _commonBundleRequest.completed += operation =>
                 {
-                    _commonBundle = _commonBundleRequest.assetBundle;
+                    if (_commonBundle == null && _commonBundleRequest != null)
+                    {
+                        _commonBundle = _commonBundleRequest.assetBundle;
+                        _commonBundleRequest = null;
+                    }
                     LoadAsset();
                 };
             }
@@ -145,7 +150,6 @@ namespace GRTools.Localization
         }
 
 #if UNITY_EDITOR
-
         public static void BuildLocalizationAssets(string localizationFilePath, BuildTarget target)
         {
             string[] paths = Directory.GetDirectories(localizationFilePath);
@@ -184,54 +188,25 @@ namespace GRTools.Localization
                     AssetDatabase.CreateFolder("Assets/StreamingAssets", parent);
                 }
                 
-                
                 BuildPipeline.BuildAssetBundles("Assets/StreamingAssets/" + parent, buildMap, BuildAssetBundleOptions.ChunkBasedCompression, target);
             }
         }
-
-        [MenuItem("GRTools/Localization/Build AssetBundles")]
+        
+        [MenuItem("Assets/GRTools/Localization/Build AssetBundles")]
         public static void BuildABsMenu()
         {
-            string key = "LocalizationFilePath";
-            string localizationFilePath =
-                EditorPrefs.GetString(key, "");
-
-            void ShowDialog()
+            string localizationAssetsPath = AssetDatabase.GUIDToAssetPath(Selection.assetGUIDs[0]);
+            if (!Directory.Exists(localizationAssetsPath))
             {
-                int index = EditorUtility.DisplayDialogComplex("LocalizationFilePath", localizationFilePath, "Build",
-                    "Cancel",
-                    "Select Folder");
-                if (index == 2)
-                {
-                    ShowFolderSelector();
-                }
-                else if (index == 0)
-                {
-                    BuildBundle();
-                }
+                EditorUtility.DisplayDialog("Invalid path", localizationAssetsPath, "OK");
             }
-
-            void ShowFolderSelector()
+            else
             {
-                localizationFilePath =
-                    EditorUtility.OpenFolderPanel("LocalizationFilePath", localizationFilePath, "Localization");
-                ShowDialog();
-            }
-
-            ShowDialog();
-
-            void BuildBundle()
-            {
-                if (!Directory.Exists(localizationFilePath))
+                bool yes = EditorUtility.DisplayDialog("Build Localization AssetBundle", localizationAssetsPath, "Build", "Cancel"); 
+                if (yes)
                 {
-                    EditorUtility.DisplayDialog("", "Invalid path", "OK");
-                    ShowDialog();
-                    return;
+                    BuildLocalizationAssets(localizationAssetsPath, EditorUserBuildSettings.activeBuildTarget);
                 }
-
-                EditorPrefs.SetString(key, localizationFilePath);
-
-                BuildLocalizationAssets(localizationFilePath, EditorUserBuildSettings.activeBuildTarget);
             }
         }
 #endif
