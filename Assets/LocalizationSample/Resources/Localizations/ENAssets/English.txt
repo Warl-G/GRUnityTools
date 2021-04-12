@@ -1,0 +1,13 @@
+Localization_Sample_Key_1=TXT_1
+Localization_Sample_Key_2=TXT_2
+Localization_Sample_Key_3=TXT_3
+
+//some comment
+
+Localization_Sample_Key_4=TXT_4====4
+Localization_Sample_Key_5=TXT_5 \n Localization_Sample_Test_5
+Localization_Sample_Key_6=TXT_6 \t Localization_Sample_Test_6 
+
+//some comment
+
+Localization_Sample_Key_7=Sample_Image_English

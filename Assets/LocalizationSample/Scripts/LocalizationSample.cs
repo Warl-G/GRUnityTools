@@ -10,7 +10,7 @@ public class LocalizationSample : MonoBehaviour
     public enum LoaderType
     {
         Resources,
-        AssetBudnle,
+        AssetBundle,
         Addressable
     }
     
@@ -18,23 +18,31 @@ public class LocalizationSample : MonoBehaviour
 
     private void Awake()
     {
-        ILocalizationLoader loader = null;
+        LocalizationLoader loader = null;
         if (loaderType == LoaderType.Resources)
         {
             loader = new LocalizationResourcesLoader();
+            loader.RootPath = "Localizations";
+            loader.ManifestPath = "TxtLocalizationManifest";
         }
-        else if (loaderType == LoaderType.AssetBudnle)
+        else if (loaderType == LoaderType.AssetBundle)
         {
             loader = new LocalizationAssetBundleLoader();
         }
         else if (loaderType == LoaderType.Addressable)
         {
-            loader = new LocalizationAddressableLoader();
+            loader = new LocalizationAddressablesLoader();
         }
         // var loader = new LocalizationResourcesLoader();
         
+        LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;
         LocalizationManager.Init(loader, LocalizationFileType.Txt);
+    }
+
+    private void OnLocalizationChanged(LocalizationInfo localizationfile)
+    {
         index = LocalizationManager.Singleton.CurrentLanguageIndex;
+        UpdateList();
     }
 
     // Start is called before the first frame update
@@ -46,38 +54,37 @@ public class LocalizationSample : MonoBehaviour
     public void ChangeLanguage()
     {
         index++;
-        index = index >= LocalizationManager.Singleton.FileList.Length ? 0 : index;
+        index = index >= LocalizationManager.Singleton.InfoList.Length ? 0 : index;
         LocalizationManager.Singleton.ChangeToLanguage(index, null);
-        UpdateList();
     }
 
     public void ChangeToCsv()
     {
-        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).parseType = LocalizationFileType.Csv;
-        ((LocalizationLoader) LocalizationManager.Singleton.Loader).FilesPath = "Csv"; 
-        LocalizationManager.Singleton.LoadAllLocalizationFilesData();
+        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationFileType.Csv;
+        ((LocalizationLoader) LocalizationManager.Singleton.Loader).ManifestPath = "CsvLocalizationManifest"; 
+        LocalizationManager.Singleton.RefreshInfoList();
     }
     
     public void ChangeToJson()
     {
-        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).parseType = LocalizationFileType.Json;
-        ((LocalizationLoader) LocalizationManager.Singleton.Loader).FilesPath = "Json";
-        LocalizationManager.Singleton.LoadAllLocalizationFilesData();
+        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationFileType.Json;
+        ((LocalizationLoader) LocalizationManager.Singleton.Loader).ManifestPath = "JsonLocalizationManifest"; 
+        LocalizationManager.Singleton.RefreshInfoList();
     }
 
     private void UpdateList()
     {
         var str = "";
-        for (int i = 0; i < LocalizationManager.Singleton.FileList.Length; i++)
+        for (int i = 0; i < LocalizationManager.Singleton.InfoList.Length; i++)
         {
-            LocalizationFile file = LocalizationManager.Singleton.FileList[i];
-            if (LocalizationManager.Singleton.CurrentLanguageType == file.Type)
+            LocalizationInfo file = LocalizationManager.Singleton.InfoList[i];
+            if (LocalizationManager.Singleton.CurrentLanguageType == file.LanguageType)
             {
-                str += "<color=#FF0000FF>" + file.FileName + "</color>";
+                str += "<color=#FF0000FF>" + file.TextAssetPath + "</color>";
             }
             else
             {
-                str += file.FileName;
+                str += file.TextAssetPath;
             }
             str += "\n";
         }

@@ -1,0 +1,13 @@
+Localization_Sample_Key_1=TXT_1_Chinese
+Localization_Sample_Key_2=TXT_2_Chinese
+Localization_Sample_Key_3=TXT_3_Chinese
+
+//some comment
+
+Localization_Sample_Key_4=TXT_4====4_Chinese
+Localization_Sample_Key_5=TXT_5_Chinese \n Localization_Sample_Test_5_Chinese
+Localization_Sample_Key_6=TXT_6_Chinese \t Localization_Sample_Test_6_Chinese 
+
+//some comment
+
+Localization_Sample_Key_7=Sample_Image_Chinese
