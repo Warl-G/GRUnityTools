@@ -7,11 +7,18 @@ namespace GRTools.Localization
 {
     public class LocalizationResourcesLoader : LocalizationLoader
     {
+        public string ManifestPath;
+
+        public LocalizationResourcesLoader(string manifestPath = "LocalizationManifest")
+        {
+            ManifestPath = manifestPath;
+        }
+
         public override void LoadManifestAsync(Action<LocalizationInfo[]> completed)
         {
             if (completed != null)
             {
-                var request = Resources.LoadAsync<LocalizationManifest>(Path.Combine(RootPath, ManifestPath));
+                var request = Resources.LoadAsync<LocalizationManifest>(ManifestPath);
                 request.completed += operation =>
                 {
                     if (operation.isDone)
@@ -45,7 +52,7 @@ namespace GRTools.Localization
         {
             if (!string.IsNullOrEmpty(assetName) && completed != null)
             {
-                var request = Resources.LoadAsync<TAsset>(Path.Combine(RootPath, info.AssetsPath, assetName));
+                var request = Resources.LoadAsync<TAsset>(Path.Combine(assetName));
                 request.completed += operation =>
                 {
                     if (operation.isDone)

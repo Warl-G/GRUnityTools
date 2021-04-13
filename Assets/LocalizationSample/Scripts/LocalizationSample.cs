@@ -1,4 +1,5 @@
 ﻿
+using System.IO;
 using GRTools.Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,8 @@ public class LocalizationSample : MonoBehaviour
 {
     [SerializeField] private Text languageList;
     [SerializeField] private LoaderType loaderType;
+
+    private LocalizationLoader _loader;
     public enum LoaderType
     {
         Resources,
@@ -18,25 +21,24 @@ public class LocalizationSample : MonoBehaviour
 
     private void Awake()
     {
-        LocalizationLoader loader = null;
         if (loaderType == LoaderType.Resources)
         {
-            loader = new LocalizationResourcesLoader();
-            loader.RootPath = "Localizations";
-            loader.ManifestPath = "TxtLocalizationManifest";
+            _loader = new LocalizationResourcesLoader(Path.Combine("Localizations", "TxtLocalizationManifest"));
         }
         else if (loaderType == LoaderType.AssetBundle)
         {
-            loader = new LocalizationAssetBundleLoader();
+            _loader = new LocalizationAssetBundleLoader();
+            // loader.RootPath =  Path.Combine(Application.streamingAssetsPath, "Localizations");
+            // loader.ManifestPath = "TxtLocalizationManifest";
         }
         else if (loaderType == LoaderType.Addressable)
         {
-            loader = new LocalizationAddressablesLoader();
+            _loader = new LocalizationAddressablesLoader();
         }
         // var loader = new LocalizationResourcesLoader();
         
         LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;
-        LocalizationManager.Init(loader, LocalizationFileType.Txt);
+        LocalizationManager.Init(_loader, LocalizationFileType.Txt);
     }
 
     private void OnLocalizationChanged(LocalizationInfo localizationfile)
@@ -61,14 +63,36 @@ public class LocalizationSample : MonoBehaviour
     public void ChangeToCsv()
     {
         ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationFileType.Csv;
-        ((LocalizationLoader) LocalizationManager.Singleton.Loader).ManifestPath = "CsvLocalizationManifest"; 
+        if (_loader is LocalizationResourcesLoader resourcesLoader)
+        {
+            resourcesLoader.ManifestPath = Path.Combine("Localizations", "CsvLocalizationManifest");
+        }
+        else if (_loader is LocalizationAssetBundleLoader assetBundleLoader)
+        {
+            
+        }
+        else if (_loader is LocalizationAddressablesLoader addressablesLoader)
+        {
+            
+        }
         LocalizationManager.Singleton.RefreshInfoList();
     }
     
     public void ChangeToJson()
     {
         ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationFileType.Json;
-        ((LocalizationLoader) LocalizationManager.Singleton.Loader).ManifestPath = "JsonLocalizationManifest"; 
+        if (_loader is LocalizationResourcesLoader resourcesLoader)
+        {
+            resourcesLoader.ManifestPath = Path.Combine("Localizations", "JsonLocalizationManifest");
+        }
+        else if (_loader is LocalizationAssetBundleLoader assetBundleLoader)
+        {
+            
+        }
+        else if (_loader is LocalizationAddressablesLoader addressablesLoader)
+        {
+            
+        }
         LocalizationManager.Singleton.RefreshInfoList();
     }
 

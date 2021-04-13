@@ -8,6 +8,8 @@ namespace GRTools.Localization
 {
     public class LocalizationAddressablesLoader : LocalizationLoader
     {
+        public string RootPath;
+        public string ManifestPath;
         public override void LoadManifestAsync(Action<LocalizationInfo[]> completed)
         {
             if (completed != null)

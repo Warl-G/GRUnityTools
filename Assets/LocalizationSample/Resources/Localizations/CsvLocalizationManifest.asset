@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InfoList:
   - LanguageType: 10
-    TextAssetPath: ENCsv
-    AssetsPath: ENAssets
+    TextAssetPath: Localizations/ENAssets/ENCsv
+    AssetsPath: 
   - LanguageType: 6
-    TextAssetPath: CNCsv
-    AssetsPath: CNAssets
+    TextAssetPath: Localizations/CNAssets/CNCsv
+    AssetsPath: 
   - LanguageType: 14
-    TextAssetPath: FRCsv
-    AssetsPath: FRAssets
+    TextAssetPath: Localizations/FRAssets/FRCsv
+    AssetsPath: 

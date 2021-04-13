@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InfoList:
   - LanguageType: 10
-    TextAssetPath: English
-    AssetsPath: ENAssets
+    TextAssetPath: Localizations/EnAssets/English
+    AssetsPath: 
   - LanguageType: 6
-    TextAssetPath: ChineseSimplified
-    AssetsPath: CNAssets
+    TextAssetPath: Localizations/CNAssets/ChineseSimplified
+    AssetsPath: 
   - LanguageType: 14
-    TextAssetPath: French
-    AssetsPath: FRAssets
+    TextAssetPath: Localizations/FRAssets/French
+    AssetsPath: 

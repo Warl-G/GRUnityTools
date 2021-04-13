@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -255,14 +255,6 @@ MonoBehaviour:
   - component: {fileID: 44757953}
     localizationKey: Localization_Sample_Key_6
     defaultValue: Localization_Sample
-    setNativeSize: 0
-  - component: {fileID: 1819606150}
-    localizationKey: Localization_Sample_Key_7
-    defaultValue: Assets/Sample_Image
-    setNativeSize: 0
-  - component: {fileID: 1797739081}
-    localizationKey: Localization_Sample_Key_7
-    defaultValue: Sample_Image
     setNativeSize: 0
 --- !u!114 &173874782
 MonoBehaviour:
@@ -1833,8 +1825,9 @@ GameObject:
   - component: {fileID: 1797739083}
   - component: {fileID: 1797739082}
   - component: {fileID: 1797739081}
+  - component: {fileID: 1797739084}
   m_Layer: 5
-  m_Name: Assetbundle&AddressableSampleImage
+  m_Name: LanguageSampleImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1897,6 +1890,22 @@ RectTransform:
   m_AnchoredPosition: {x: 390.3, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1797739084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797739080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed2ad3b29633aba4bb2dc4d72f4252b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: Localization_Sample_Key_7
+  defaultValue: Sample_Image
+  setNativeSize: 0
+  image: {fileID: 1797739081}
 --- !u!1 &1819606148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1908,8 +1917,9 @@ GameObject:
   - component: {fileID: 1819606149}
   - component: {fileID: 1819606151}
   - component: {fileID: 1819606150}
+  - component: {fileID: 1819606152}
   m_Layer: 5
-  m_Name: ResourcesSampleImage
+  m_Name: CommonSampleImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1972,3 +1982,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1819606148}
   m_CullTransparentMesh: 0
+--- !u!114 &1819606152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819606148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed2ad3b29633aba4bb2dc4d72f4252b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: Localization_Sample_Key_8
+  defaultValue: Sample_Image
+  setNativeSize: 1
+  image: {fileID: 1819606150}

@@ -35,16 +35,6 @@ namespace GRTools.Localization
 
     public abstract class LocalizationLoader :  ILocalizationLoader<LocalizationInfo>
     {
-        private const string KLocalizationRootPath = "Localizations";
-
-        public string RootPath;
-        public string ManifestPath;
-
-        protected LocalizationLoader(string rootPath = KLocalizationRootPath, string manifestPath = "LocalizationManifest.asset")
-        {
-            RootPath = rootPath;
-            ManifestPath = manifestPath;
-        }
         public abstract void LoadManifestAsync(Action<LocalizationInfo[]> completed);
 
         public abstract void LoadLocalizationTextAsset(LocalizationInfo info,

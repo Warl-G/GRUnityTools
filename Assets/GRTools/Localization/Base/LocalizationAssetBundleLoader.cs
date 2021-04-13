@@ -9,6 +9,8 @@ namespace GRTools.Localization
 {
     public class LocalizationAssetBundleLoader : LocalizationLoader
     {
+        public string RootPath;
+        public string ManifestPath;
         /// <summary>
         /// 公共语言资源Bundle名称
         /// </summary>
@@ -82,7 +84,7 @@ namespace GRTools.Localization
             AssetBundleCreateRequest loadrequest = null;
             if (_assetBundle == null)
             {
-                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, RootPath, assetsPath));
+                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(RootPath, assetsPath));
             }
             else if (!_assetBundle.name.Equals(assetsPath))
             {
@@ -93,7 +95,7 @@ namespace GRTools.Localization
                     _assetBundle = null;
                 }
                 
-                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, RootPath, assetsPath));
+                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(RootPath, assetsPath));
             }
 
             if (loadrequest != null)
@@ -129,7 +131,7 @@ namespace GRTools.Localization
                 if (_commonBundleRequest == null)
                 {
                     _commonBundleRequest =
-                        AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, RootPath,
+                        AssetBundle.LoadFromFileAsync(Path.Combine(RootPath,
                             CommonAssetsPath));
                 }
                 

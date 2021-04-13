@@ -5,6 +5,6 @@
   "Localization_Sample_Key_4": "Json_4  Json_4 _Chinese",
   "Localization_Sample_Key_5": "Json_5 \n Json_5_Chinese",
   "Localization_Sample_Key_6": "Json_6 \t Json_6_Chinese",
-  "Localization_Sample_Key_7": "Localizations/CNAssets/Sample_Image_Chinese",
-  "Localization_Sample_Key_8": "Localizations/Common/Sample_Image"
+  "Localization_Sample_Key_7": "CNAssets/Sample_Image_Chinese",
+  "Localization_Sample_Key_8": "Common/Sample_Image"
 }

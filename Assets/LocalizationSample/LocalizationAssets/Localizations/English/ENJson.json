@@ -5,6 +5,6 @@
   "Localization_Sample_Key_4": "Json_4  Json_4 ",
   "Localization_Sample_Key_5": "Json_5 \n Json_5",
   "Localization_Sample_Key_6": "Json_6 \t Json_6",
-  "Localization_Sample_Key_7": "Localizations/ENAssets/Sample_Image_English",
-  "Localization_Sample_Key_8": "Localizations/Common/Sample_Image2"
+  "Localization_Sample_Key_7": "ENAssets/Sample_Image_English",
+  "Localization_Sample_Key_8": "Common/Sample_Image2"
 }
