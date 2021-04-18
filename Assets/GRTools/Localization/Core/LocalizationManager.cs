@@ -118,7 +118,7 @@ namespace GRTools.Localization
             _defaultLanguage = defaultLanguage;
 
             //获取语言列表
-            RefreshInfoList(assetLoader, assetParser);
+            RefreshInfoList(assetLoader, assetParser, null);
         }
 
         /// <summary>
@@ -126,7 +126,9 @@ namespace GRTools.Localization
         /// </summary>
         /// <param name="assetLoader"></param>
         /// <param name="assetParser"></param>
-        public void RefreshInfoList(ILocalizationLoader<LocalizationInfo> assetLoader = null, ILocalizationParser assetParser = null)
+        /// <param name="completed"></param>
+        public void RefreshInfoList(ILocalizationLoader<LocalizationInfo> assetLoader = null,
+            ILocalizationParser assetParser = null, Action<bool> completed = null)
         {
             if (assetLoader != null)
             {
@@ -140,50 +142,53 @@ namespace GRTools.Localization
             
             SystemLanguage savedLanguageType = (SystemLanguage)PlayerPrefs.GetInt(KLocalizeKey, _followSystem ? (int)SystemLanguageType : (int)_defaultLanguage);
 
-            Loader.LoadManifestAsync(infoList =>
+            Loader.LoadManifestAsync((success, infoList) =>
             {
-                if (infoList.Length > 0)
+                if (success)
                 {
                     InfoList = infoList;
                     _currentInfo = null;
-                    
-                    int defaultIndex = -1;
-                    for (int i = 0; i < infoList.Length; i++)
-                    {
-                        if (_currentInfo == null && infoList[i].LanguageType == savedLanguageType)
-                        {
-                            _currentInfo = infoList[i];
-                        }
 
-                        if (defaultIndex == -1 && infoList[i].LanguageType == _defaultLanguage)
-                        {
-                            defaultIndex = i;
-                        }
-                    }
-                    //若无选中语言则依据系统语言，若无系统语言则默认第一个
-                    if (_currentInfo == null)
+                    if (infoList.Length > 0)
                     {
-                        if (defaultIndex > -1)
+                        int defaultIndex = -1;
+                        for (int i = 0; i < infoList.Length; i++)
                         {
-                            _currentInfo = infoList[defaultIndex];
+                            if (_currentInfo == null && infoList[i].LanguageType == savedLanguageType)
+                            {
+                                _currentInfo = infoList[i];
+                            }
+
+                            if (defaultIndex == -1 && infoList[i].LanguageType == _defaultLanguage)
+                            {
+                                defaultIndex = i;
+                            }
                         }
-                        else
+                        //若无选中语言则依据系统语言，若无系统语言则默认第一个
+                        if (_currentInfo == null)
                         {
-                            _currentInfo = InfoList[0];
+                            if (defaultIndex > -1)
+                            {
+                                _currentInfo = infoList[defaultIndex];
+                            }
+                            else
+                            {
+                                _currentInfo = InfoList[0];
+                            }
                         }
+                        LoadLocalizationDict(_currentInfo, null);
                     }
-                    
-                    LoadLocalizationDict(_currentInfo, null);
                 }
+                completed?.Invoke(success);
             });
         }
 
         /// <summary>
         /// 加载并解析语言文件
         /// </summary>
-        /// <param name="fileName">文件名</param>
-        /// <param name="complete">加载成功回调</param>
-        private void LoadLocalizationDict(LocalizationInfo info, Action<bool> success)
+        /// <param name="info">本地化信息, Localizationinfo</param>
+        /// <param name="completed">加载成功回调, success callback</param>
+        private void LoadLocalizationDict(LocalizationInfo info, Action<bool> completed)
         {
             IsLoading = true;
             Loader.LoadLocalizationTextAsset(info, asset =>
@@ -197,9 +202,9 @@ namespace GRTools.Localization
                         {
                             Parse(defaultAsset);
                         }
-                        else if (success != null)
+                        else
                         {
-                            success(false);
+                            completed?.Invoke(false);
                         }
                     });
                 }
@@ -220,16 +225,13 @@ namespace GRTools.Localization
                         _localDict = null;
                     }
                     _localDict = dict;
-                    
-                    if (success != null)
-                    {
-                        success(true);
-                    }
+
+                    completed?.Invoke(true);
                     LocalizationChangeEvent?.Invoke(CurrentLocalizationInfo);
                 }
                 else
                 {
-                    success?.Invoke(false);
+                    completed?.Invoke(false);
                 }
                 IsLoading = false;
             }
@@ -237,6 +239,7 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 语言类型在语言表的index
+        /// index of SystemLanguage in languageManifest
         /// </summary>
         /// <param name="language"></param>
         /// <returns></returns>
@@ -255,6 +258,7 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 清除语言选择记录
+        /// Clear language selection
         /// </summary>
         public void ClearLanguageSelection()
         {
@@ -264,10 +268,11 @@ namespace GRTools.Localization
 
 
         /// <summary>
-        /// 根据 LocalizationFileList index 更换语言
+        /// 根据 LocalizationManifest index 更换语言
+        /// Change language in LocalizationManifest
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="success">切换成功回调</param>
+        /// <param name="index">index of language in LanguageManifest</param>
+        /// <param name="success">text success loaded callback</param>
         public void ChangeToLanguage(int index, Action<bool> success)
         {
             if (InfoList.Length > 0 && InfoList.Length > index && index >= 0)
@@ -275,17 +280,18 @@ namespace GRTools.Localization
                 CurrentLocalizationInfo = InfoList[index];
                 LoadLocalizationDict(CurrentLocalizationInfo, success);
             }
-            else if (success != null)
+            else
             {
-                success(false);
+                success?.Invoke(false);
             }
         }
 
         /// <summary>
         /// 根据语言类型更换语言
+        /// Change to language
         /// </summary>
         /// <param name="language"></param>
-        /// <param name="success">切换成功回调</param>
+        /// <param name="success">text success loaded callback</param>
         public void ChangeToLanguage(SystemLanguage language, Action<bool> success)
         {
             if (language == SystemLanguage.Chinese)
@@ -299,6 +305,7 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 通过键获取本地化文本
+        /// Get localized text by key
         /// </summary>
         /// <param name="key">本地化键 key of localized text</param>
         /// <param name="defaultText">默认值 default localized text value</param>
@@ -318,38 +325,21 @@ namespace GRTools.Localization
             return _localDict[key];
         }
 
-        public void LoadLocalizationAssetAsync<T>(string assetPath, string defaultAssetPath, Action<T> callback) where T : UnityEngine.Object
+        /// <summary>
+        /// Get asset for current language info by loader
+        /// </summary>
+        /// <param name="assetPath"> Asset Path</param>
+        /// <param name="callback"> Asset loaded callback </param>
+        /// <typeparam name="TAsset"> Asset type </typeparam>
+        public void LoadLocalizationAssetAsync<TAsset>(string assetPath, Action<TAsset> callback) where TAsset : Object
         {
-            Loader.LoadAssetAsync<T>(CurrentLocalizationInfo, assetPath, false,asset =>
+            Loader.LoadAssetAsync<TAsset>(CurrentLocalizationInfo, assetPath,asset =>
             {
-                if (asset == null)
+                if (asset == null && WarnMissedValue)
                 {
-                    if (WarnMissedValue)
-                    {
-                        Debug.LogWarning("Localization: Miss asset '" + assetPath + "'");
-                    }
-            
-                    if (!string.IsNullOrEmpty(defaultAssetPath))
-                    {
-                        Loader.LoadAssetAsync<T>(CurrentLocalizationInfo, defaultAssetPath, true,defaultAsset =>
-                        {
-                            if (WarnMissedValue && defaultAsset == null)
-                            {
-                                Debug.LogWarning("Localization: Miss asset '" + defaultAssetPath + "'");
-                            }
-            
-                            callback?.Invoke(defaultAsset);
-                        });
-                    }
-                    else
-                    {
-                        callback?.Invoke(asset);
-                    }
+                    Debug.LogWarning($"Localization: Miss asset '{assetPath}'");
                 }
-                else
-                {
-                    callback?.Invoke(asset);
-                }
+                callback?.Invoke(asset);
             });
         }
     }

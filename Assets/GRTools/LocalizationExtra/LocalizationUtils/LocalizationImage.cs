@@ -34,34 +34,40 @@ namespace GRTools.Localization
             {
                 image = GetComponent<Image>();
             }
-            if (image != null)
+            string value = LocalizationManager.Singleton.GetLocalizedText(localizationKey, defaultValue);
+            
+            if (image != null && !string.IsNullOrEmpty(value))
             {
                 if (_originalImageSize == Vector2.zero)
                 {
                     _originalImageSize = image.rectTransform.sizeDelta;
                 }
-                string value = LocalizationManager.Singleton.GetLocalizedText(localizationKey);
-                if (value == null)
-                {
-                    value = defaultValue;
-                }
 
-                LocalizationManager.Singleton.LoadLocalizationAssetAsync(value, defaultValue,
-                    delegate(Sprite sprite)
+                LocalizationManager.Singleton.LoadLocalizationAssetAsync<Sprite>(value, sprite =>
+                {
+                    if (sprite == null && !string.IsNullOrEmpty(defaultValue) && value != defaultValue)
                     {
-                        if (sprite != null)
-                        {
-                            image.sprite = sprite;
-                            if (setNativeSize)
-                            {
-                                image.SetNativeSize();
-                            }
-                            else
-                            {
-                                image.rectTransform.sizeDelta = _originalImageSize;
-                            }
-                        }
-                    });
+                        LocalizationManager.Singleton.LoadLocalizationAssetAsync<Sprite>(defaultValue,
+                            SpriteLoaded);
+                    }
+                    else
+                    {
+                        SpriteLoaded(sprite);
+                    }
+                });
+                
+                void SpriteLoaded(Sprite sprite)
+                {
+                    image.sprite = sprite;
+                    if (setNativeSize)
+                    {
+                        image.SetNativeSize();
+                    }
+                    else
+                    {
+                        image.rectTransform.sizeDelta = _originalImageSize;
+                    }
+                }
             }
         }
     }

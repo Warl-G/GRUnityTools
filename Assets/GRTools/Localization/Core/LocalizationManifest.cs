@@ -7,11 +7,6 @@ namespace GRTools.Localization
     [Serializable]
     public class LocalizationManifest : ScriptableObject
     {
-        // public LocalizationManifest(LocalizationInfo[] infoList)
-        // {
-        //     InfoList = infoList;
-        // }
-        //
-        public LocalizationInfo[] InfoList; //{ get; }
+        public LocalizationInfo[] InfoList;
     }
 }

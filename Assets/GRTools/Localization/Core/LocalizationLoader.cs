@@ -10,7 +10,7 @@ namespace GRTools.Localization
         /// Load manifest of supported languages
         /// </summary>
         /// <param name="completed"></param>
-        void LoadManifestAsync(Action<TLocalizationInfo[]> completed);
+        void LoadManifestAsync(Action<bool, TLocalizationInfo[]> completed);
 
         /// <summary>
         /// 加载语言文本文件
@@ -18,7 +18,6 @@ namespace GRTools.Localization
         /// </summary>
         /// <param name="info"></param>
         /// <param name="completed"></param>
-        /// <typeparam name="TAsset"></typeparam>
         void LoadLocalizationTextAsset(TLocalizationInfo info, Action<Object> completed);
 
         /// <summary>
@@ -27,20 +26,19 @@ namespace GRTools.Localization
         /// </summary>
         /// <param name="info">LocalizationFile type instance</param>
         /// <param name="assetName"></param>
-        /// <param name="defaultAsset">是否为默认资源 use as default asset</param>
         /// <param name="completed">加载完成回调 completed callback</param>
         /// <typeparam name="TAsset"></typeparam>
-        void LoadAssetAsync<TAsset>(TLocalizationInfo info, string assetName, bool defaultAsset, Action<TAsset> completed) where TAsset : Object;
+        void LoadAssetAsync<TAsset>(TLocalizationInfo info, string assetName, Action<TAsset> completed) where TAsset : Object;
     }
 
     public abstract class LocalizationLoader :  ILocalizationLoader<LocalizationInfo>
     {
-        public abstract void LoadManifestAsync(Action<LocalizationInfo[]> completed);
+        public abstract void LoadManifestAsync(Action<bool, LocalizationInfo[]> completed);
 
         public abstract void LoadLocalizationTextAsset(LocalizationInfo info,
             Action<Object> completed);
 
-        public abstract void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, bool defaultAsset,
+        public abstract void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName,
             Action<TAsset> completed) where TAsset : Object;
     }
 }

@@ -14,7 +14,7 @@ namespace GRTools.Localization
             ManifestPath = manifestPath;
         }
 
-        public override void LoadManifestAsync(Action<LocalizationInfo[]> completed)
+        public override void LoadManifestAsync(Action<bool, LocalizationInfo[]> completed)
         {
             if (completed != null)
             {
@@ -31,11 +31,11 @@ namespace GRTools.Localization
                             {
                                 newInfoList[i] = infoList[i];
                             }
-                            completed(newInfoList);
+                            completed(true, newInfoList);
                         }
                         else
                         {
-                            completed(new LocalizationInfo[0]);
+                            completed(false, new LocalizationInfo[0]);
                         }
                         Resources.UnloadAsset(request.asset);
                     }
@@ -45,10 +45,10 @@ namespace GRTools.Localization
 
         public override void LoadLocalizationTextAsset(LocalizationInfo info, Action<Object> completed)
         {
-            LoadAssetAsync(info, info.TextAssetPath, false, completed);
+            LoadAssetAsync(info, info.TextAssetPath, completed);
         }
 
-        public override void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, bool defaultAsset, Action<TAsset> completed)
+        public override void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, Action<TAsset> completed)
         {
             if (!string.IsNullOrEmpty(assetName) && completed != null)
             {

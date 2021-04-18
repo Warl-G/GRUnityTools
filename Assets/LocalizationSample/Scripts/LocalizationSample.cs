@@ -33,23 +33,16 @@ public class LocalizationSample : MonoBehaviour
         }
         else if (loaderType == LoaderType.Addressable)
         {
-            _loader = new LocalizationAddressablesLoader();
+            _loader = new LocalizationAddressablesLoader("Localizations", "Localizations/TxtLocalizationManifest.asset");
         }
-        // var loader = new LocalizationResourcesLoader();
         
         LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;
         LocalizationManager.Init(_loader, LocalizationFileType.Txt);
     }
 
-    private void OnLocalizationChanged(LocalizationInfo localizationfile)
+    private void OnLocalizationChanged(LocalizationInfo localizationInfo)
     {
         index = LocalizationManager.Singleton.CurrentLanguageIndex;
-        UpdateList();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         UpdateList();
     }
 
@@ -73,7 +66,7 @@ public class LocalizationSample : MonoBehaviour
         }
         else if (_loader is LocalizationAddressablesLoader addressablesLoader)
         {
-            
+            addressablesLoader.ManifestAddress = "Localizations/CsvLocalizationManifest.asset";
         }
         LocalizationManager.Singleton.RefreshInfoList();
     }
@@ -91,7 +84,7 @@ public class LocalizationSample : MonoBehaviour
         }
         else if (_loader is LocalizationAddressablesLoader addressablesLoader)
         {
-            
+            addressablesLoader.ManifestAddress = "Localizations/JsonLocalizationManifest.asset";
         }
         LocalizationManager.Singleton.RefreshInfoList();
     }

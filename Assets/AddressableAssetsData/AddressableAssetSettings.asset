@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
   m_DefaultGroup: d9348473596f0496cae286a628be44a4
+  m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
   m_DisableCatalogUpdateOnStart: 0
+  m_IgnoreUnsupportedFilesInBuild: 0
   m_UniqueBundleIds: 0
+  m_maxConcurrentWebRequests: 500
+  m_ContiguousBundles: 0
   m_RemoteCatalogBuildPath:
     m_Id: 
   m_RemoteCatalogLoadPath:
@@ -25,10 +29,7 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 5090dbf6dcca74c3fb263f6218a513f7, type: 2}
   - {fileID: 11400000, guid: 9c7381096a6014d01ae6331f92fb0e99, type: 2}
-  - {fileID: 11400000, guid: b6ff6fd786f6c437f8b14183f3f76b0a, type: 2}
-  - {fileID: 11400000, guid: 1a3b393afddd64eb395df824ded0b09d, type: 2}
-  - {fileID: 11400000, guid: 7eec8d07250dd4dbe86ca37dbbde7cb7, type: 2}
-  - {fileID: 11400000, guid: 9becb71b2bb234bf78cc157ca4c27344, type: 2}
+  - {fileID: 11400000, guid: e2513e8d27cc24697a6cdec36132ba04, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1

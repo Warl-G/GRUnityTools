@@ -14,11 +14,11 @@ namespace GRTools.Localization
         [Tooltip("是否设置图片原始尺寸")] public bool setNativeSize;
         internal Vector2 originalImageSize = Vector2.zero;
     }
-    
+
     public class LocalizationComponent : MonoBehaviour
     {
-        public LocalizationComponentItem[] items; 
-        
+        public LocalizationComponentItem[] items;
+
         private SystemLanguage _currentLanguage;
 
         private void Start()
@@ -27,6 +27,7 @@ namespace GRTools.Localization
             {
                 OnLocalizationChanged(LocalizationManager.Singleton.CurrentLocalizationInfo);
             }
+
             LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;
         }
 
@@ -42,68 +43,123 @@ namespace GRTools.Localization
             {
                 if (!string.IsNullOrEmpty(item.localizationKey) && item.component != null)
                 {
-                    string value = LocalizationManager.Singleton.GetLocalizedText(item.localizationKey);
-                    if (value == null)
-                    {
-                        value = item.defaultValue;
-                    }
+                    string value = LocalizationManager.Singleton.GetLocalizedText(item.localizationKey, item.defaultValue);
+                    ChangeText(item.component, value);
+                    ChangeSprite(item, value);
+                }
+            }
+        }
 
-                    if (item.component is Text text)
+        private void ChangeText(Component component, string value)
+        {
+            if (component is Text text)
+            {
+                text.text = value;
+            }
+            else if (component is TextMesh mesh)
+            {
+                mesh.text = value;
+            }
+
+            if (component is TextMeshPro tmp)
+            {
+                tmp.text = value;
+            }
+            else if (component is TextMeshProUGUI mesh)
+            {
+                mesh.text = value;
+            }
+        }
+
+        private void ChangeSprite(LocalizationComponentItem item, string value)
+        {
+            Image image = item.component as Image;
+            SpriteRenderer spriteRenderer = item.component as SpriteRenderer;
+
+            if (image != null)
+            {
+                if (item.originalImageSize == Vector2.zero)
+                {
+                    item.originalImageSize = image.rectTransform.sizeDelta;
+                }
+            }
+
+            if (image != null || spriteRenderer != null)
+            {
+                //替换图片
+                LocalizationManager.Singleton.LoadLocalizationAssetAsync<Sprite>(value, sprite =>
+                {
+                    if (sprite == null && !string.IsNullOrEmpty(item.defaultValue) && value != item.defaultValue)
                     {
-                        text.text = value;
-                    }
-                    else if (item.component is TextMesh mesh)
-                    {
-                        mesh.text = value;
-                    }
-                    if (item.component is TextMeshPro tmp)
-                    {
-                        tmp.text = value;
-                    }
-                    else if (item.component is TextMeshProUGUI mesh)
-                    {
-                        mesh.text = value;
+                        LocalizationManager.Singleton.LoadLocalizationAssetAsync<Sprite>(item.defaultValue,
+                            SpriteLoaded);
                     }
                     else
                     {
-                        Image image = item.component as Image;
-                        SpriteRenderer spriteRenderer = item.component as SpriteRenderer;
+                        SpriteLoaded(sprite);
+                    }
+                });
 
-                        if (image != null)
+                void SpriteLoaded(Sprite sprite)
+                {
+                    if (image != null)
+                    {
+                        image.sprite = sprite;
+                        if (item.setNativeSize)
                         {
-                            if (item.originalImageSize == Vector2.zero)
-                            {
-                                item.originalImageSize = image.rectTransform.sizeDelta;
-                            }
+                            image.SetNativeSize();
                         }
-
-                        if (image != null || spriteRenderer != null)
+                        else
                         {
-                            //替换图片
-                            LocalizationManager.Singleton.LoadLocalizationAssetAsync(value, item.defaultValue,
-                                delegate(Sprite sprite)
-                                {
-                                    if (sprite != null)
-                                    {
-                                        if (image != null)
-                                        {
-                                            image.sprite = sprite;
-                                            if (item.setNativeSize)
-                                            {
-                                                image.SetNativeSize();
-                                            }
-                                            else
-                                            {
-                                                image.rectTransform.sizeDelta = item.originalImageSize;
-                                            }
-                                        }
+                            image.rectTransform.sizeDelta = item.originalImageSize;
+                        }
+                    }
 
-                                        if (spriteRenderer != null)
-                                        {
-                                            spriteRenderer.sprite = sprite;
-                                        }
-                                    }
-                                });
+                    if (spriteRenderer != null)
+                    {
+                        spriteRenderer.sprite = sprite;
+                    }
+                }
+            }
+        }
+
+        private void ChangeTexture(LocalizationComponentItem item, string value)
+        {
+            RawImage image = item.component as RawImage;
+
+            if (image != null && !string.IsNullOrEmpty(value))
+            {
+                if (item.originalImageSize == Vector2.zero)
+                {
+                    item.originalImageSize = image.rectTransform.sizeDelta;
+                }
+                
+                //替换图片
+                LocalizationManager.Singleton.LoadLocalizationAssetAsync<Texture>(value, texture =>
+                {
+                    if (texture == null && !string.IsNullOrEmpty(item.defaultValue) && value != item.defaultValue)
+                    {
+                        LocalizationManager.Singleton.LoadLocalizationAssetAsync<Texture>(item.defaultValue,
+                            TextureLoaded);
+                    }
+                    else
+                    {
+                        TextureLoaded(texture);
+                    }
+                });
+
+                void TextureLoaded(Texture texture)
+                {
+                    if (image != null)
+                    {
+                        image.texture = texture;
+                        if (item.setNativeSize)
+                        {
+                            image.SetNativeSize();
+                        }
+                        else
+                        {
+                            image.rectTransform.sizeDelta = item.originalImageSize;
                         }
                     }
                 }

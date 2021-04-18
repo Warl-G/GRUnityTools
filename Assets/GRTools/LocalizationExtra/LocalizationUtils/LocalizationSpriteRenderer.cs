@@ -30,22 +30,24 @@ namespace GRTools.Localization
             {
                 spriteRenderer = GetComponent<SpriteRenderer>();
             }
-            if (spriteRenderer != null)
+            string value = LocalizationManager.Singleton.GetLocalizedText(localizationKey, defaultValue);
+            if (spriteRenderer != null && !string.IsNullOrEmpty(value))
             {
-                string value = LocalizationManager.Singleton.GetLocalizedText(localizationKey);
-                if (value == null)
+                LocalizationManager.Singleton.LoadLocalizationAssetAsync<Sprite>(value, sprite =>
                 {
-                    value = defaultValue;
-                }
-
-                LocalizationManager.Singleton.LoadLocalizationAssetAsync(value, defaultValue,
-                    delegate(Sprite sprite)
+                    if (sprite == null && !string.IsNullOrEmpty(defaultValue) && value != defaultValue)
                     {
-                        if (sprite != null)
-                        {
-                            spriteRenderer.sprite = sprite;
-                        }
-                    });
+                        LocalizationManager.Singleton.LoadLocalizationAssetAsync<Sprite>(defaultValue,
+                            defaultSprite =>
+                            {
+                                spriteRenderer.sprite = defaultSprite;
+                            });
+                    }
+                    else
+                    {
+                        spriteRenderer.sprite = sprite;
+                    }
+                });
             }
         }
     }

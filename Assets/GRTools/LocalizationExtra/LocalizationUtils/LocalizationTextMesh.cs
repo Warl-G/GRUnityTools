@@ -31,12 +31,7 @@ namespace GRTools.Localization
             }
             if (text != null)
             {
-                string value = LocalizationManager.Singleton.GetLocalizedText(localizationKey);
-                if (value == null)
-                {
-                    value = defaultValue;
-                }
-
+                string value = LocalizationManager.Singleton.GetLocalizedText(localizationKey, defaultValue);
                 text.text = value;
             }
         }
