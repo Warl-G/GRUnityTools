@@ -8,13 +8,20 @@ namespace GRTools.Localization
 {
     public class LocalizationAddressablesLoader : LocalizationLoader
     {
-        public string RootPath;
-        public string ManifestPath;
-        public override void LoadManifestAsync(Action<LocalizationInfo[]> completed)
+        public string RootAddress;
+        public string ManifestAddress;
+
+        public LocalizationAddressablesLoader(string rootAddress = "", string manifestAddress = "LocalizationManifest")
+        {
+            RootAddress = rootAddress;
+            ManifestAddress = manifestAddress;
+        }
+        
+        public override void LoadManifestAsync(Action<bool ,LocalizationInfo[]> completed)
         {
             if (completed != null)
             {
-                Addressables.LoadAssetAsync<LocalizationManifest>(Path.Combine(RootPath, ManifestPath)).Completed += handle =>
+                Addressables.LoadAssetAsync<LocalizationManifest>(ManifestAddress).Completed += handle =>
                 {
                     if (handle.Status == AsyncOperationStatus.Succeeded)
                     {
@@ -26,8 +33,12 @@ namespace GRTools.Localization
                             {
                                 newInfoList[i] = infoList[i];
                             }
-                            completed(newInfoList);
+                            completed(true, newInfoList);
                         }
+                    }
+                    else
+                    {
+                        completed(false, new LocalizationInfo[0]);
                     }
                 };
             }
@@ -35,16 +46,23 @@ namespace GRTools.Localization
 
         public override void LoadLocalizationTextAsset(LocalizationInfo info, Action<Object> completed)
         {
-            LoadAssetAsync(info, info.TextAssetPath, false, completed);
+            LoadAssetAsync(info, info.TextAssetPath, completed);
         }
 
-        public override void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, bool defaultAsset, Action<TAsset> completed)
+        public override void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, Action<TAsset> completed)
         {
             if (!string.IsNullOrEmpty(assetName) && completed != null)
             {
-                Addressables.LoadAssetAsync<TAsset>(Path.Combine(info.AssetsPath, assetName)).Completed += handle =>
+                Addressables.LoadAssetAsync<TAsset>(Path.Combine(RootAddress, info.AssetsPath, assetName)).Completed += handle =>
                 {
-                    completed(handle.Result);
+                    if (handle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        completed(handle.Result);
+                    }
+                    else
+                    {
+                        completed(null);
+                    }
                 };
             }
         }
