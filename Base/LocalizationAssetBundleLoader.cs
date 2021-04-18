@@ -9,7 +9,7 @@ namespace GRTools.Localization
 {
     public class LocalizationAssetBundleLoader : LocalizationLoader
     {
-        public string RootPath;
+        public string BundleRootPath;
         public string ManifestPath;
         /// <summary>
         /// 公共语言资源Bundle名称
@@ -18,6 +18,7 @@ namespace GRTools.Localization
         
         /// <summary>
         /// 是否卸载上一个本地化 AssetBundle
+        /// Unload last loaded localization assetbundle
         /// </summary>
         public bool UnloadLastLocalizationBundle = true;
 
@@ -25,11 +26,11 @@ namespace GRTools.Localization
         private AssetBundle _assetBundle;
         private AssetBundle _commonBundle;
         
-        public override void LoadManifestAsync(Action<LocalizationInfo[]> completed)
+        public override void LoadManifestAsync(Action<bool, LocalizationInfo[]> completed)
         {
             if (completed != null)
             {
-                var request = Resources.LoadAsync<LocalizationManifest>(Path.Combine(RootPath, ManifestPath));
+                var request = Resources.LoadAsync<LocalizationManifest>(Path.Combine(BundleRootPath, ManifestPath));
                 request.completed += operation =>
                 {
                     if (operation.isDone)
@@ -42,7 +43,7 @@ namespace GRTools.Localization
                             {
                                 newInfoList[i] = infoList[i];
                             }
-                            completed(newInfoList);
+                            completed(true, newInfoList);
                         }
                         Resources.UnloadAsset(request.asset);
                     }
@@ -55,18 +56,12 @@ namespace GRTools.Localization
             LoadLocalizationBundle(info.AssetsPath, info.TextAssetPath, completed);
         }
 
-        public override void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, bool defaultAsset, Action<TAsset> completed)
+        public override void LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, Action<TAsset> completed)
         {
             if (!string.IsNullOrEmpty(assetName) && completed != null)
             {
-                if (defaultAsset)
-                {
-                    LoadCommonBundle(assetName, completed);
-                }
-                else
-                {
-                    LoadLocalizationBundle(info.AssetsPath, assetName, completed);
-                }
+                // LoadCommonBundle(assetName, completed);
+                LoadLocalizationBundle(info.AssetsPath, assetName, completed);
             }
         }
 
@@ -84,7 +79,7 @@ namespace GRTools.Localization
             AssetBundleCreateRequest loadrequest = null;
             if (_assetBundle == null)
             {
-                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(RootPath, assetsPath));
+                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(BundleRootPath, assetsPath));
             }
             else if (!_assetBundle.name.Equals(assetsPath))
             {
@@ -95,7 +90,7 @@ namespace GRTools.Localization
                     _assetBundle = null;
                 }
                 
-                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(RootPath, assetsPath));
+                loadrequest = AssetBundle.LoadFromFileAsync(Path.Combine(BundleRootPath, assetsPath));
             }
 
             if (loadrequest != null)
@@ -131,7 +126,7 @@ namespace GRTools.Localization
                 if (_commonBundleRequest == null)
                 {
                     _commonBundleRequest =
-                        AssetBundle.LoadFromFileAsync(Path.Combine(RootPath,
+                        AssetBundle.LoadFromFileAsync(Path.Combine(BundleRootPath,
                             CommonAssetsPath));
                 }
                 
