@@ -1668,7 +1668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   languageList: {fileID: 727526850}
-  loaderType: 1
+  loaderType: 2
 --- !u!4 &1490883748
 Transform:
   m_ObjectHideFlags: 0

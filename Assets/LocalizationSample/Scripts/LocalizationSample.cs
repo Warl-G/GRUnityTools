@@ -31,7 +31,7 @@ public class LocalizationSample : MonoBehaviour
         }
         else if (loaderType == LoaderType.Addressable)
         {
-            _loader = new LocalizationAddressablesLoader("Localizations", "Localizations/TxtLocalizationManifest.asset");
+            _loader = new LocalizationAddressablesLoader("Localizations/TxtLocalizationManifest.asset");
         }
         
         LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;

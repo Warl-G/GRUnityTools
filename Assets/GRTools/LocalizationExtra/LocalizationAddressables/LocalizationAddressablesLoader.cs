@@ -8,12 +8,9 @@ namespace GRTools.Localization
 {
     public class LocalizationAddressablesLoader : LocalizationLoader
     {
-        public string RootAddress;
         public string ManifestAddress;
-
-        public LocalizationAddressablesLoader(string rootAddress = "", string manifestAddress = "LocalizationManifest")
+        public LocalizationAddressablesLoader(string manifestAddress = "LocalizationManifest")
         {
-            RootAddress = rootAddress;
             ManifestAddress = manifestAddress;
         }
         
@@ -53,7 +50,7 @@ namespace GRTools.Localization
         {
             if (!string.IsNullOrEmpty(assetName) && completed != null)
             {
-                Addressables.LoadAssetAsync<TAsset>(Path.Combine(RootAddress, info.AssetsPath, assetName)).Completed += handle =>
+                Addressables.LoadAssetAsync<TAsset>(Path.Combine(assetName)).Completed += handle =>
                 {
                     if (handle.Status == AsyncOperationStatus.Succeeded)
                     {
