@@ -11,4 +11,4 @@ Localization_Sample_Key_6=TXT_6_French \t Localization_Sample_Test_6 _French
 //some comment
 
 Localization_Sample_Key_7=Sample_Image_French.jpg
-Localization_Sample_Key_8=Sample_Image3.jpg
+Localization_Sample_Key_8=Common/Sample_Image3.jpg

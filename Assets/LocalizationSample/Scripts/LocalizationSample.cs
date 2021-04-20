@@ -27,9 +27,7 @@ public class LocalizationSample : MonoBehaviour
         }
         else if (loaderType == LoaderType.AssetBundle)
         {
-            _loader = new LocalizationAssetBundleLoader();
-            // loader.RootPath =  Path.Combine(Application.streamingAssetsPath, "Localizations");
-            // loader.ManifestPath = "TxtLocalizationManifest";
+            _loader = new LocalizationAssetBundleLoader("LocalManifestsForAB/TxtLocalizationManifest");
         }
         else if (loaderType == LoaderType.Addressable)
         {
@@ -62,7 +60,7 @@ public class LocalizationSample : MonoBehaviour
         }
         else if (_loader is LocalizationAssetBundleLoader assetBundleLoader)
         {
-            
+            assetBundleLoader.ManifestPath = "LocalManifestsForAB/CsvLocalizationManifest";
         }
         else if (_loader is LocalizationAddressablesLoader addressablesLoader)
         {
@@ -80,7 +78,7 @@ public class LocalizationSample : MonoBehaviour
         }
         else if (_loader is LocalizationAssetBundleLoader assetBundleLoader)
         {
-            
+            assetBundleLoader.ManifestPath = "LocalManifestsForAB/JsonLocalizationManifest";
         }
         else if (_loader is LocalizationAddressablesLoader addressablesLoader)
         {

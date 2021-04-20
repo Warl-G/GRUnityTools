@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 1708745944
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4e6074a506e696162f43d4134cbdc915
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9ecc2e8d717629781f019ff30323ba53
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/ChineseSimplified/Sample_Image_Chinese.jpg
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/ChineseSimplified/CNJson.json
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/ChineseSimplified/CNCsv.csv
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/ChineseSimplified/ChineseSimplified.txt
+Dependencies: []

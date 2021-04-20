@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 1940348802
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8ae88f38bbaa11185360d89cb8b35963
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9ecc2e8d717629781f019ff30323ba53
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/English/Assets/Sample_Image_English.jpg
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/English/ENJson.json
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/English/English.txt
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/English/ENCsv.csv
+Dependencies: []

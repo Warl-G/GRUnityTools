@@ -15,7 +15,7 @@ namespace GRTools.Localization
         internal Vector2 originalImageSize = Vector2.zero;
     }
 
-    public class LocalizationComponent : MonoBehaviour
+    public class LocalizationComponentList : MonoBehaviour
     {
         public LocalizationComponentItem[] items;
 
