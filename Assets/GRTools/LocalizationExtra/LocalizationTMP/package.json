@@ -1,0 +1,22 @@
+{
+  "name": "com.warlg.grtools.localization.tmp",
+  "displayName": "GRTools.Localization.TextMeshPro",
+  "version": "1.0.0",
+  "description": "GRTools.Localization 支持 TextMeshPro 组件的扩展包\n引用 'com.warlg.grtools.localization'\nmore info : https://github.com/Warl-G/GRUnityTools",
+  "author": "Warl-G",
+  "license": "MIT",
+  "unity": "2018.3",
+  "dependencies": {
+  	"com.warlg.grtools.localization" : "1.1.0",
+    "com.unity.textmeshpro" : "3.0.1"
+  },
+  "keywords": [
+    "Localization",
+    "TextMeshPro"
+  ],
+  "author": {
+    "name": "Warl-G",
+    "email": "guoru123@sina.com",
+    "url": "https://warl-g.github.io/"
+  }
+}

@@ -50,7 +50,7 @@ GRTools 的线程工具包
 
 ### GRTools.Localization  
 
-Ver.1.0.0 | `"com.warlg.grtools.localization": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization@1.0.0"`
+Ver.1.1.0 | `"com.warlg.grtools.localization": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization@1.1.0"`
 
 GRTools 的本地化工具包，需引用 GRTools.Utils  
 
@@ -66,11 +66,11 @@ GRTools 的本地化工具包，需引用 GRTools.Utils
 
 ### GRTools.Localization.Addressable   
 
-Ver.1.0.0 | `"com.warlg.grtools.localization.addressable": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Addressable@1.0.0"`
+Ver.1.0.2 | `"com.warlg.grtools.localization.addressables": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Addressables@1.0.2"`
 
 GRTools 的本地化工具的扩展包，需引用 GRTools.Localization   
 
-为本地化资源加载扩展 Addressable 支持，详见`GRTools.Localization`
+为本地化资源加载扩展 Addressables 支持，详见`GRTools.Localization`
 
 ### GRTools.Sqlite  
 

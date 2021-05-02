@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 505996527
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 811e9ce9e793bc5de9eae02fa84de95a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b0363f7088f9761414f730641bf9a24b
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/Common/Sample_Image3.jpg
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/Common/Sample_Image2.jpg
+- Assets/LocalizationSample/LocalizationAssetsForAB/Localizations/Common/Sample_Image.jpg
+Dependencies: []

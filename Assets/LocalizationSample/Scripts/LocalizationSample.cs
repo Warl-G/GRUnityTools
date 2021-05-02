@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.IO;
 using GRTools.Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,10 +9,12 @@ public class LocalizationSample : MonoBehaviour
 {
     [SerializeField] private Text languageList;
     [SerializeField] private LoaderType loaderType;
+
+    private LocalizationLoader _loader;
     public enum LoaderType
     {
         Resources,
-        AssetBudnle,
+        AssetBundle,
         Addressable
     }
     
@@ -18,66 +22,85 @@ public class LocalizationSample : MonoBehaviour
 
     private void Awake()
     {
-        ILocalizationLoader loader = null;
         if (loaderType == LoaderType.Resources)
         {
-            loader = new LocalizationResourcesLoader();
+            _loader = new LocalizationResourcesLoader(Path.Combine("Localizations", "TxtLocalizationManifest"));
         }
-        else if (loaderType == LoaderType.AssetBudnle)
+        else if (loaderType == LoaderType.AssetBundle)
         {
-            loader = new LocalizationAssetBundleLoader();
+            _loader = new LocalizationAssetBundleLoader("LocalManifestsForAB/TxtLocalizationManifest");
         }
         else if (loaderType == LoaderType.Addressable)
         {
-            loader = new LocalizationAddressableLoader();
+            _loader = new LocalizationAddressablesLoader("Localizations/TxtLocalizationManifest.asset");
         }
-        // var loader = new LocalizationResourcesLoader();
         
-        LocalizationManager.Init(loader, LocalizationFileType.Txt);
-        index = LocalizationManager.Singleton.CurrentLanguageIndex;
+        LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;
+        LocalizationManager.Init(_loader, LocalizationTextType.Txt);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnLocalizationChanged(LocalizationInfo localizationInfo)
     {
+        index = LocalizationManager.Singleton.CurrentLanguageIndex;
         UpdateList();
     }
 
     public void ChangeLanguage()
     {
         index++;
-        index = index >= LocalizationManager.Singleton.FileList.Length ? 0 : index;
+        index = index >= LocalizationManager.Singleton.InfoList.Length ? 0 : index;
         LocalizationManager.Singleton.ChangeToLanguage(index, null);
-        UpdateList();
     }
 
     public void ChangeToCsv()
     {
-        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).parseType = LocalizationFileType.Csv;
-        ((LocalizationLoader) LocalizationManager.Singleton.Loader).FilesPath = "Csv"; 
-        LocalizationManager.Singleton.LoadAllLocalizationFilesData();
+        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationTextType.Csv;
+        if (_loader is LocalizationResourcesLoader resourcesLoader)
+        {
+            resourcesLoader.ManifestPath = Path.Combine("Localizations", "CsvLocalizationManifest");
+        }
+        else if (_loader is LocalizationAssetBundleLoader assetBundleLoader)
+        {
+            assetBundleLoader.ManifestPath = "LocalManifestsForAB/CsvLocalizationManifest";
+        }
+        else if (_loader is LocalizationAddressablesLoader addressablesLoader)
+        {
+            addressablesLoader.ManifestAddress = "Localizations/CsvLocalizationManifest.asset";
+        }
+        LocalizationManager.Singleton.RefreshInfoList();
     }
     
     public void ChangeToJson()
     {
-        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).parseType = LocalizationFileType.Json;
-        ((LocalizationLoader) LocalizationManager.Singleton.Loader).FilesPath = "Json";
-        LocalizationManager.Singleton.LoadAllLocalizationFilesData();
+        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationTextType.Json;
+        if (_loader is LocalizationResourcesLoader resourcesLoader)
+        {
+            resourcesLoader.ManifestPath = Path.Combine("Localizations", "JsonLocalizationManifest");
+        }
+        else if (_loader is LocalizationAssetBundleLoader assetBundleLoader)
+        {
+            assetBundleLoader.ManifestPath = "LocalManifestsForAB/JsonLocalizationManifest";
+        }
+        else if (_loader is LocalizationAddressablesLoader addressablesLoader)
+        {
+            addressablesLoader.ManifestAddress = "Localizations/JsonLocalizationManifest.asset";
+        }
+        LocalizationManager.Singleton.RefreshInfoList();
     }
 
     private void UpdateList()
     {
         var str = "";
-        for (int i = 0; i < LocalizationManager.Singleton.FileList.Length; i++)
+        for (int i = 0; i < LocalizationManager.Singleton.InfoList.Length; i++)
         {
-            LocalizationFile file = LocalizationManager.Singleton.FileList[i];
-            if (LocalizationManager.Singleton.CurrentLanguageType == file.Type)
+            LocalizationInfo file = LocalizationManager.Singleton.InfoList[i];
+            if (LocalizationManager.Singleton.CurrentLanguageType == file.LanguageType)
             {
-                str += "<color=#FF0000FF>" + file.FileName + "</color>";
+                str += "<color=#FF0000FF>" + file.TextAssetPath + "</color>";
             }
             else
             {
-                str += file.FileName;
+                str += file.TextAssetPath;
             }
             str += "\n";
         }

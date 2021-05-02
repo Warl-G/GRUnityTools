@@ -1,0 +1,10 @@
+{
+  "Localization_Sample_Key_1": "Json_1",
+  "Localization_Sample_Key_2": 123456,
+  "Localization_Sample_Key_3": "\"Json_3\"",
+  "Localization_Sample_Key_4": "Json_4  Json_4 ",
+  "Localization_Sample_Key_5": "Json_5 \n Json_5",
+  "Localization_Sample_Key_6": "Json_6 \t Json_6",
+  "Localization_Sample_Key_7": "Sample_Image_English.jpg",
+  "Localization_Sample_Key_8": "Common/Sample_Image2.jpg"
+}
