@@ -1,6 +1,6 @@
 ## GRTools.Localization  
 
-version 1.0.0
+version 1.1.0
 
 本地化工具，分为 LocalizationManager 、LocalizationComponent 以及文本解析接口 ILocalizationParser 和 资源加载接口 ILocalizationLoader
 
@@ -20,6 +20,17 @@ ILocalizationLoader 负责加载本地化资源
 
 样例可在 GRTools/LocalizationSample 查看
 
+### 工具目录  
+
+```
+|-- GRTools.Localization 本地化核心库
+	|-- Core	核心库
+	|-- Base	基础支持库
+|-- GRTools.Localization.Utils 提供组件工具库
+|-- GRTools.Localization.Addressables Addressables 支持
+|-- GRTools.Localization.TMP	TextMeshPro 支持
+```
+
 ### 使用说明    
 
 #### 资源格式   
@@ -38,13 +49,11 @@ ILocalizationLoader 负责加载本地化资源
 
 `LocalizationChangeEvent` 监听语言切换事件  
 
-`LoadAllLocalizationFilesData`更换加载器解析器并重新读取语言文件列表  
+`RefreshInfoList`更换加载器解析器并重新读取语言配置列表  
 
 `ChangeToLanguage`  切换语言
 
 `GetLocalizedText`获取本地化文本字段
-
-`LoadLocalizationAssetAsync` 加载本地化资源
 
 若配合 LocalizationComponent 使用，文件中值可为本地化文案，也可为本地化图片路径（Resources 下路径）
 
@@ -54,9 +63,9 @@ ILocalizationLoader 负责加载本地化资源
 
   本地化语言更改事件   
 
-* FileList  
+* InfoList  
 
-  本地化资源目录下文件列表，可用作支持语言列表
+  本地化资源配置信息列表
 
 * WarnMissedValue
 
@@ -74,22 +83,17 @@ ILocalizationLoader 负责加载本地化资源
 
   系统语言，由 Application.systemLanguage 转换成 string  
 
-* CurrentLocalizationFile  
+* CurrentLocalizationInfo  
 
   当前选择语言文件
 
-* Init(ILocalizationLoader fileLoader, ILocalizationParser fileParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English) 
+* Init(ILocalizationLoader assetLoader, ILocalizationParser assetParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
 
-  必须调用，否则无法生成单例，默认开启跟随系统语言 (followSystem)，找不到对应文件默认使用英语，默认使用`LocalizationAssetBundleLoader`，默认解析器文件类型 csv
+  必须调用，否则无法生成单例，默认开启跟随系统语言 (followSystem)，默认使用英语
 
-* Init(ILocalizationLoader fileLoader, LocalizationFileType fileType = LocalizationFileType.Csv, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
-
-  必须调用，否则无法生成单例，默认开启跟随系统语言 (followSystem)，找不到对应文件默认使用英语，默认使用`LocalizationAssetBundleLoader`，默认解析器文件类型 csv
-
-* LoadAllLocalizationFilesData(ILocalizationLoader fileLoader = null, ILocalizationParser fileParser = null)
-
-  单例重新加载语言文件列表，可传入新的加载器和解析器  
-
+* RefreshInfoList(ILocalizationLoader assetLoader = null,
+            ILocalizationParser assetParser = null, Action<bool> completed = null)
+  
 * ClearLanguageSelection()  
 
   清除语言选择记录
@@ -98,15 +102,45 @@ ILocalizationLoader 负责加载本地化资源
 
   根据 FileList index 或 SystemLanguage 更改语言，返回是否成功 
 
-* GetLocalizedText(string key)  
+* GetLocalizedText(string key, string defaultText = "")  
 
-  由键获取文案或相应的资源路径  
+  由键获取文案或相应的资源路径，可设置默认文本  
 
-* LoadLocalizationAssetAsync<T>(string assetPath, string defaultAssetPath, Action<T> callback)
+### LocalizationExtensions  
 
-  异步通过传入的资源路径获取资源，若无法获取则通过默认路径获取
+- Init(bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
 
-### LocalizationComponent  
+  使用默认`LocalizationResourcesLoader`加载器和 `LocalizationDefaultParser` 解析器
+
+- Init(ILocalizationLoader assetLoader, LocalizationTextType textType = LocalizationTextType.Csv, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
+
+  使用自定义加载器和默认解析器
+
+- LoadLocalizationAssetAsync<TAsset>(string assetPath, Action<TAsset> callback) where TAsset : Object
+
+  异步通过传入的资源路径获取资源
+
+### LocalizationInfo  
+
+多语言资源配置信息，用于 ILocalizationLoader 读取，可继承复写用于自定义加载器使用
+
+* LanguageType  
+
+  语言类型
+
+* TextAssetPath  
+
+  多语言文本文件路径
+
+* AssetsPath  
+
+  资源文件路径
+
+### LocalizationManifest  
+
+用于保存 `LocalizationInfo` 列表的 ScriptableObject，配合默认加载器使用，可自定义其他配置文件
+
+### LocalizationComponentList  
 
 用于挂载 Monobehavior 对象，自动执行控件更新，可增加 LocalizationComponentItem 数组内容配置相应键值
 
@@ -132,60 +166,48 @@ ILocalizationLoader 负责加载本地化资源
 
 本地化资源加载器接口，需实现以下两方法提供给 LocalizationManager 使用  
 
-* LoadAllFileListAsync(Action<LocalizationFile[]> complete)
+* LoadManifestAsync(Action<bool, LocalizationInfo[]> completed)
 
   加载语言文本文件列表
 
-* LoadAssetAsync<T>(string localizationFileName, string assetPath, bool defaultAsset, Action<T> complete)  
+* LoadLocalizationTextAsset(LocalizationInfo info, Action<Object> completed)
 
-  加载本地化资源   
+  加载本地化文本资源
 
-【**命名规范**】：语言文本文件名称需与 UnityEngine.SystemLanguage 枚举值名称一致，另外可添加序号用于排序
+* LoadAssetAsync<TAsset>(LocalizationInfo info, string assetName, Action<TAsset> completed) where TAsset : Object  
 
-如 `ChineseSimplified.txt` `English.txt` 或 `0.English.txt`  `1.ChineseSimplified.txt` 
+  加载本地化其他资源   
 
 ***其中 UnityEngine.SystemLanguage.Chinese 会转换为 ChineseSimplified 类型***
 
 首个语言会作为无目标语言情况下的默认语言   
 
-本项目提供了三种预设资源管理方式  
+本项目提供了三种预设资源管理方式，均配合 LocalizationManifest 加载多语言配置信息
 
 * LocalizationResourcesLoader
 * LocalizationAssetBundleLoader
-* LocalizationAddressableLoader
+* LocalizationAddressablesLoader
 
 #### LocalizationResourcesLoader  
 
 使用 Resources 加载本地化资源（Unity 官方并不建议使用 Resources 动态加载资源）  
 
-Resources 默认本地化文件路径为 `Localization` 即资源需存放于  Assets/Resources/Localization 下，该路径可通过修改`FilesPath`属性，修改默认路径
-
-每种语言的文本文件需存放于根目录（根目录不能有其他文本文件），其他资源可放置于`FilesPath`下任意位置，
-
-若使用 `LocalizationComponent`自动更新，则需在文本中配置相应路径，便于从正确路径加载
+ResourcesLoader 通过 ManifestPath 路径变量加载配置文件， 详细使用方式可见项目中示例
 
 例：
 
-```
-Assets/Resources/Localization/0.English.txt
-Assets/Resources/Localization/1.ChineseSimplified.txt
-Assets/Resources/Localization/Assets/_Default
-Assets/Resources/Localization/Assets/English/Image0.png			// 英文图片资源
-Assets/Resources/Localization/Assets/Image_Chinese.png				// 中文图片资源
-```
-
-如上资源目录，则在文本中类似下方配置(以本项目提供的 txt 解析格式为例) 
-
-0.English.txt
+English.txt
 
 ```
-Image_Key=Assets/English/Image0
+Image_Key=Localizations/ENAssets/Sample_Image_English
+Common_Image_key=Localizations/Common/Sample_Image2
 ```
 
-1.ChineseSimplified.txt
+ChineseSimplified.txt
 
 ```
-Image_Key=Assets/Image_Chinese
+Image_Key=Localizations/CNAssets/Sample_Image_Chinese
+Common_Image_key=Localizations/Common/Sample_Image
 ```
 
 <img src="Images/Localization01.png" style="zoom:50%;" />
@@ -194,14 +216,16 @@ Image_Key=Assets/Image_Chinese
 
 LocalizationAssetBundleLoader 使用 AssetBundle 管理本地化资源，该 Loader 提供针对本地化资源打包 AssetBundle 的快捷指令  
 
-* 工具栏 > GRTools > Localization > Build AssetBundle
+* 右击需打包资源目录 > GRTools > Localization > Build AssetBundles
 * LocalizationAssetBundleLoader.BuildLocalizationAssets(string localizationFilePath, BuildTarget target)  
 
-使用上述两种方式打包，需将本地化资源放入统一路径，并遵循上方【**命名规范**】创建不同语言路径，放入相应资源，文本文件需和路径同名
+使用上述两种方式打包，需将本地化资源放入统一路径，脚本会按目录中子目录名称分包
 
-快捷打包会使用文件夹名称分别打包成每种语言的 AssetBundle，会依据选择的目录最后一级目录名称，存于 StreamingAssets 目录下，运行时加载支持语言列表和加载语言文本均依据该目录下 AssetBundle 名称，该路径可通过修改`FilesPath`属性，修改默认路径
+快捷打包会使用文件夹名称分别打包成每种语言的 AssetBundle，会依据选择的目录最后一级目录名称，存于 StreamingAssets 目录下，加载器会依据 LocalizationManifest 中配置的路径名称加载对应 AssetBundle
 
 同时还提供公共资源路径属性`CommonAssetsPath`，默认值为`Common`，即与语言目录同级的`Common`目录用于打包多语言通用资源  
+
+`CommonAssetsPrefix` 公共资源前置路径，带有该前置字符的路径会从 Common AssetsBundle 加载
 
 UnloadLastLocalizationBundle 属性，是否在加载新的语言 AssetBundle 时卸载上一个
 
@@ -209,23 +233,11 @@ UnloadLastLocalizationBundle 属性，是否在加载新的语言 AssetBundle �
 
 例选择 Localization 目录作为资源目录进行打包，则 AssetBundle 会打包在 StreamingAssets下的 Localization 目录  
 
-```
-Assets/Localization/0.English/0.English.txt
-Assets/Localization/0.English/Assets/Image0.png			// 英文图片资源
-Assets/Localization/1.ChineseSimplified/1.ChineseSimplified.txt
-Assets/Localization/1.ChineseSimplified/Image_Chinese.png				// 中文图片资源
-Assets/Localization/Common/Common_Image.png
-```
-
-<img src="Images/Localization02.png" style="zoom:50%;" />
-
 <img src="Images/Localization03.png" style="zoom:50%;" />
 
 #### LocalizationAddressableLoader  
 
-另外扩展了 Addressable 的支持，为避免引用问题，`LocalizationAddressableLoader`的需从 `GRTools/LocalizationExtra`中手动下载导入，或使用 UPM 导入`"com.warlg.grtools.localization.addressable": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Addressable"`  
-
-LocalizationAddressableLoader 使用`FilesPath`值作为语言文本文件标签名，默认`Localization` ，通过获取该标签获取文本文件的 Address，Address 值需遵循【**命名规范**】
+另外扩展了 Addressable 的支持，为避免引用问题，`LocalizationAddressableLoader`的需从 `GRTools/LocalizationExtra`中手动下载导入，或使用 UPM 导入`"com.warlg.grtools.localization.addressables": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Addressables"`  
 
 若使用 `LocalizationComponent`自动更新，文本中配置资源 Address 即可
 
