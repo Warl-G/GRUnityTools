@@ -2,8 +2,7 @@
     "name": "GRTools.Localization.Utils",
     "rootNamespace": "",
     "references": [
-        "GUID:7e4c17a2a211542839709530e3e72302",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:7e4c17a2a211542839709530e3e72302"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
