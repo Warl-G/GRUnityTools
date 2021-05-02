@@ -8,8 +8,9 @@ namespace GRTools.Localization
 {
     /// <summary>
     /// 可解析类型
+    /// Text file type that can be parsed
     /// </summary>
-    public enum LocalizationFileType
+    public enum LocalizationTextType
     {
         Txt,
         Csv,
@@ -17,33 +18,34 @@ namespace GRTools.Localization
     }
     public class LocalizationDefaultParser : ILocalizationParser
     {
-        public LocalizationFileType ParseType;
+        public LocalizationTextType ParseType;
 
-        public LocalizationDefaultParser(LocalizationFileType type = LocalizationFileType.Csv)
+        public LocalizationDefaultParser(LocalizationTextType type = LocalizationTextType.Csv)
         {
             ParseType = type;
         }
         /// <summary>
         /// 解析本地化文本
+        /// Parse localization text
         /// </summary>
-        /// <param name="textAsset">本地化文本</param>
+        /// <param name="textAsset">本地化文本 localization text</param>
         /// <returns></returns>
         public Dictionary<string, string> Parse(Object textAsset)
         {
             TextAsset asset = textAsset as TextAsset;
             if (asset)
             {
-                if (ParseType == LocalizationFileType.Csv)
+                if (ParseType == LocalizationTextType.Csv)
                 {
                     return ParseCsv(asset.text);
                 }
             
-                if (ParseType == LocalizationFileType.Txt)
+                if (ParseType == LocalizationTextType.Txt)
                 {
                     return ParseTxt(asset.text);
                 }
 
-                if (ParseType == LocalizationFileType.Json)
+                if (ParseType == LocalizationTextType.Json)
                 {
                     return ParseJson(asset.text);
                 }
@@ -54,6 +56,7 @@ namespace GRTools.Localization
     
         /// <summary>
         /// 解析本地化 txt 文本
+        /// Parse txt file
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
@@ -84,6 +87,7 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 解析本地化 csv 文本
+        /// parse csv text
         /// </summary>
         /// <param name="csv"></param>
         /// <returns></returns>
@@ -109,6 +113,7 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 解析本地化 json 文本
+        /// parse json text
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>

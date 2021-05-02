@@ -27,37 +27,44 @@ namespace GRTools.Localization
         
         /// <summary>
         /// 更改语言事件，初始化时会调用一次
+        /// Language changed event, will be called when Init()
         /// </summary>
         public static event LocalizationChangeHandler LocalizationChangeEvent;
         public static LocalizationManager Singleton => _singleton;
         
         /// <summary>
-        /// 本地化文件列表
+        /// 本地化信息列表
+        /// Localization info list
         /// </summary>
         public LocalizationInfo[] InfoList { private set; get; }
 
         /// <summary>
         /// 多语言资源加载器
+        /// Localization asset loader
         /// </summary>
-        public ILocalizationLoader<LocalizationInfo> Loader;
+        public ILocalizationLoader Loader;
 
         /// <summary>
         /// 多语言文本文件解析器
+        /// Localization text parser
         /// </summary>
         public ILocalizationParser Parser;
         
         /// <summary>
         /// 是否正在读取多语言文本文件
+        /// If is loading text asset
         /// </summary>
         public bool IsLoading { private set; get; }
 
         /// <summary>
         /// 警告缺失键值
+        /// Warn invalid key
         /// </summary>
         public bool WarnMissedValue = false;
         
         /// <summary>
         /// 当前语言类型（SystemLanguage.Chinese 会转换为 SystemLanguage.ChineseSimplified 类型）
+        /// Current language type, SystemLanguage.Chinese will be considered as SystemLanguage.ChineseSimplified
         /// </summary>
         public SystemLanguage CurrentLanguageType => CurrentLocalizationInfo.LanguageType;
 
@@ -65,6 +72,7 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 系统语言类型（SystemLanguage.Chinese 会转换为 SystemLanguage.ChineseSimplified 类型）
+        /// System language type, SystemLanguage.Chinese will be considered as SystemLanguage.ChineseSimplified
         /// </summary>
         public SystemLanguage SystemLanguageType
         {
@@ -81,7 +89,8 @@ namespace GRTools.Localization
         }
 
         /// <summary>
-        /// 当前多语言文件信息
+        /// 当前多语言配置信息
+        /// Current localization info
         /// </summary>
         public LocalizationInfo CurrentLocalizationInfo
         {
@@ -104,7 +113,7 @@ namespace GRTools.Localization
 
         private Dictionary<string, string> _localDict;
         
-        public static void Init(ILocalizationLoader<LocalizationInfo> assetLoader, ILocalizationParser assetParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
+        public static void Init(ILocalizationLoader assetLoader, ILocalizationParser assetParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
         {
             if (_singleton == null)
             {
@@ -112,7 +121,7 @@ namespace GRTools.Localization
             }
         }
 
-        private LocalizationManager(ILocalizationLoader<LocalizationInfo> assetLoader, ILocalizationParser assetParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
+        private LocalizationManager(ILocalizationLoader assetLoader, ILocalizationParser assetParser, bool followSystem = true, SystemLanguage defaultLanguage = SystemLanguage.English)
         {
             _followSystem = followSystem;
             _defaultLanguage = defaultLanguage;
@@ -127,7 +136,7 @@ namespace GRTools.Localization
         /// <param name="assetLoader"></param>
         /// <param name="assetParser"></param>
         /// <param name="completed"></param>
-        public void RefreshInfoList(ILocalizationLoader<LocalizationInfo> assetLoader = null,
+        public void RefreshInfoList(ILocalizationLoader assetLoader = null,
             ILocalizationParser assetParser = null, Action<bool> completed = null)
         {
             if (assetLoader != null)
@@ -185,9 +194,16 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 加载并解析语言文件
+        /// Load and parse localization text file
         /// </summary>
-        /// <param name="info">本地化信息, Localizationinfo</param>
-        /// <param name="completed">加载成功回调, success callback</param>
+        /// <param name="info">
+        /// 本地化信息
+        /// Localizationinfo
+        /// </param>
+        /// <param name="completed">
+        /// 加载成功回调
+        /// success callback
+        /// </param>
         private void LoadLocalizationDict(LocalizationInfo info, Action<bool> completed)
         {
             IsLoading = true;
@@ -195,7 +211,7 @@ namespace GRTools.Localization
             {
                 if (asset == null)
                 {
-                    Debug.LogError("Localization: no localizefile " + info.TextAssetPath);
+                    Debug.LogError("Localization: no localization text file " + info.TextAssetPath);
                     Loader.LoadLocalizationTextAsset(InfoList[0], defaultAsset =>
                     {
                         if (defaultAsset != null)
@@ -239,7 +255,7 @@ namespace GRTools.Localization
 
         /// <summary>
         /// 语言类型在语言表的index
-        /// index of SystemLanguage in languageManifest
+        /// Index of SystemLanguage in languageManifest
         /// </summary>
         /// <param name="language"></param>
         /// <returns></returns>
@@ -271,8 +287,8 @@ namespace GRTools.Localization
         /// 根据 LocalizationManifest index 更换语言
         /// Change language in LocalizationManifest
         /// </summary>
-        /// <param name="index">index of language in LanguageManifest</param>
-        /// <param name="success">text success loaded callback</param>
+        /// <param name="index">语言序号 Index of language in LanguageManifest</param>
+        /// <param name="success">成功回调 callback</param>
         public void ChangeToLanguage(int index, Action<bool> success)
         {
             if (InfoList.Length > 0 && InfoList.Length > index && index >= 0)
@@ -291,7 +307,7 @@ namespace GRTools.Localization
         /// Change to language
         /// </summary>
         /// <param name="language"></param>
-        /// <param name="success">text success loaded callback</param>
+        /// <param name="success">成功回调 callback</param>
         public void ChangeToLanguage(SystemLanguage language, Action<bool> success)
         {
             if (language == SystemLanguage.Chinese)
@@ -307,8 +323,14 @@ namespace GRTools.Localization
         /// 通过键获取本地化文本
         /// Get localized text by key
         /// </summary>
-        /// <param name="key">本地化键 key of localized text</param>
-        /// <param name="defaultText">默认值 default localized text value</param>
+        /// <param name="key">
+        /// 本地化键
+        /// Key for localized text
+        /// </param>
+        /// <param name="defaultText">
+        /// 默认值
+        /// Default localized text value
+        /// </param>
         /// <returns></returns>
         public string GetLocalizedText(string key, string defaultText = "")
         {
@@ -316,31 +338,13 @@ namespace GRTools.Localization
             {
                 if (WarnMissedValue)
                 {
-                    Debug.LogWarning("Localization: Miss localized text key: " + key);
+                    Debug.LogWarning("Localization: Localized text key is invalid: " + key);
                 }
 
                 return defaultText;
             }
 
             return _localDict[key];
-        }
-
-        /// <summary>
-        /// Get asset for current language info by loader
-        /// </summary>
-        /// <param name="assetPath"> Asset Path</param>
-        /// <param name="callback"> Asset loaded callback </param>
-        /// <typeparam name="TAsset"> Asset type </typeparam>
-        public void LoadLocalizationAssetAsync<TAsset>(string assetPath, Action<TAsset> callback) where TAsset : Object
-        {
-            Loader.LoadAssetAsync<TAsset>(CurrentLocalizationInfo, assetPath,asset =>
-            {
-                if (asset == null && WarnMissedValue)
-                {
-                    Debug.LogWarning($"Localization: Miss asset '{assetPath}'");
-                }
-                callback?.Invoke(asset);
-            });
         }
     }
 }
