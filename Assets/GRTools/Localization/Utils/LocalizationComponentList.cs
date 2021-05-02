@@ -1,5 +1,4 @@
 ﻿using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,15 +56,6 @@ namespace GRTools.Localization
                 text.text = value;
             }
             else if (component is TextMesh mesh)
-            {
-                mesh.text = value;
-            }
-
-            if (component is TextMeshPro tmp)
-            {
-                tmp.text = value;
-            }
-            else if (component is TextMeshProUGUI mesh)
             {
                 mesh.text = value;
             }
