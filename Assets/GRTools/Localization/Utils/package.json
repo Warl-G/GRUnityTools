@@ -7,7 +7,7 @@
   "license": "MIT",
   "unity": "2018.3",
   "dependencies": {
-  	"com.warlg.grtools.localization" : "1.0.2"
+  	"com.warlg.grtools.localization" : "1.1.0"
   },
   "keywords": [
     "Localization"

@@ -13,9 +13,13 @@ namespace GRTools.Localization
         public string ManifestPath;
         /// <summary>
         /// 公共语言资源Bundle名称
+        /// common asset bundle Path
         /// </summary>
         public string CommonBundlePath;
 
+        /// <summary>
+        /// Prefix of asset path to identify common asset
+        /// </summary>
         public string CommonAssetsPrefix;
         
         /// <summary>

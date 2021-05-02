@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.IO;
 using GRTools.Localization;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class LocalizationSample : MonoBehaviour
         }
         
         LocalizationManager.LocalizationChangeEvent += OnLocalizationChanged;
-        LocalizationManager.Init(_loader, LocalizationFileType.Txt);
+        LocalizationManager.Init(_loader, LocalizationTextType.Txt);
     }
 
     private void OnLocalizationChanged(LocalizationInfo localizationInfo)
@@ -53,7 +54,7 @@ public class LocalizationSample : MonoBehaviour
 
     public void ChangeToCsv()
     {
-        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationFileType.Csv;
+        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationTextType.Csv;
         if (_loader is LocalizationResourcesLoader resourcesLoader)
         {
             resourcesLoader.ManifestPath = Path.Combine("Localizations", "CsvLocalizationManifest");
@@ -71,7 +72,7 @@ public class LocalizationSample : MonoBehaviour
     
     public void ChangeToJson()
     {
-        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationFileType.Json;
+        ((LocalizationDefaultParser) LocalizationManager.Singleton.Parser).ParseType = LocalizationTextType.Json;
         if (_loader is LocalizationResourcesLoader resourcesLoader)
         {
             resourcesLoader.ManifestPath = Path.Combine("Localizations", "JsonLocalizationManifest");
