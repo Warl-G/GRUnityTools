@@ -5,9 +5,9 @@
   "description": "GRTools 针对 Addressables 的辅助工具包 more info : https://github.com/Warl-G/GRUnityTools",
   "author": "Warl-G",
   "license": "MIT",
-  "unity": "2018.3",
+  "unity": "2019.3",
   "dependencies": {
-  	"com.unity.addressables" : "1.9.2"
+  	"com.unity.addressables" : "1.16.16"
   },
   "keywords": [
     "Addressables",
