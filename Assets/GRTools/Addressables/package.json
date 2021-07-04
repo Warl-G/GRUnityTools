@@ -1,0 +1,21 @@
+{
+  "name": "com.warlg.grtools.addressables",
+  "displayName": "GRTools.Addressables",
+  "version": "0.0.1",
+  "description": "GRTools 针对 Addressables 的辅助工具包 more info : https://github.com/Warl-G/GRUnityTools",
+  "author": "Warl-G",
+  "license": "MIT",
+  "unity": "2018.3",
+  "dependencies": {
+  	"com.unity.addressables" : "1.9.2"
+  },
+  "keywords": [
+    "Addressables",
+    "Builtin Resources"
+  ],
+  "author": {
+    "name": "Warl-G",
+    "email": "guoru123@sina.com",
+    "url": "https://warl-g.github.io/"
+  }
+}
