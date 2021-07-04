@@ -29,7 +29,7 @@ namespace UnityEditor.AddressableAssets.Build.DataBuilders
     /// Build scripts used for player builds and running with bundles in the editor.
     /// </summary>
     [CreateAssetMenu(fileName = "BuiltInResSBuildScriptPacked.asset", menuName = "Addressables/Content Builders/Builtin ResS Build Script")]
-    public class BuiltInResSBuildScriptPackedMode : BuildScriptPackedMode
+    public class BuiltInResSBuildScriptPackedMode : BuildScriptBase
     {
         /// <inheritdoc />
         public override string Name
