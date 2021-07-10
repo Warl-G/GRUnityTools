@@ -6,8 +6,13 @@
   "author": "Warl-G",
   "license": "MIT",
   "unity": "2018.3",
-  "dependencies": {
-  	"com.warlg.grtools.thread" : "1.0.1"
+  "dependencies": {},
+  "gitDependencies": {
+    "com.warlg.grtools.thread" : "https://github.com/Warl-G/GRUnityTools.git#GRTools.Thread@1.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Sqlite"
   },
   "keywords": [
     "Database",
