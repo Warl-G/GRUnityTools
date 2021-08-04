@@ -7,8 +7,14 @@
   "license": "MIT",
   "unity": "2018.3",
   "dependencies": {
-  	"com.warlg.grtools.localization" : "1.1.0",
     "com.unity.textmeshpro" : "3.0.1"
+  },
+  "gitPackages": {
+    "com.warlg.grtools.localization" : "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization@1.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.TextMeshPro"
   },
   "keywords": [
     "Localization",
