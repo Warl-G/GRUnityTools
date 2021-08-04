@@ -9,6 +9,10 @@
   "dependencies": {
   	"com.unity.nuget.newtonsoft-json" : "2.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Utils"
+  },
   "keywords": [
     "csv",
     "json"
