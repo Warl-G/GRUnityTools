@@ -7,7 +7,7 @@
   "license": "MIT",
   "unity": "2018.3",
   "dependencies": {},
-  "gitDependencies": {
+  "gitPackages": {
     "com.warlg.grtools.thread" : "https://github.com/Warl-G/GRUnityTools.git#GRTools.Thread@1.0.1"
   },
   "repository": {
