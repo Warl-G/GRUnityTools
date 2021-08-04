@@ -1,0 +1,32 @@
+{
+	"name": "com.warlg.grtools.gitpackageresolver",
+	"displayName": "GRTools.GitPackageResolver",
+	"version": "1.0.0",
+	"description": "由 https://github.com/mob-sakai/GitDependencyResolverForUnity.git 改写， 用于 Package 的非规范 SemVer 解析工具，如 Git URL\nmore info : https://github.com/Warl-G/GRUnityTools",
+	"license": "MIT",
+	"unity": "2018.3",
+	"dependencies": {},
+	"gitPackages": {
+		"com.warlg.grtools.utils": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Utils",
+		"com.warlg.grtools.thread": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Thread",
+		"com.warlg.grtools.sqlite": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Sqlite",
+		"com.warlg.grtools.addressables": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Addressables",
+		"com.warlg.grtools.localization": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization",
+		"com.warlg.grtools.localization.utils": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Utils",
+		"com.warlg.grtools.localization.tmp": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.TextMeshPro",
+		"com.warlg.grtools.localization.addressables": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Addressables"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Warl-G/GRUnityTools.git#GRTools.GitPackageResolver"
+	},
+	"keywords": [
+		"Git",
+		"Package"
+	],
+	"author": {
+		"name": "Warl-G",
+		"email": "guoru123@sina.com",
+		"url": "https://warl-g.github.io/"
+	}
+}
