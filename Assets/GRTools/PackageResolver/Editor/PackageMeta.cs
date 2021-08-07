@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace GRTools.PackageResolver
+namespace GRTools.GitPackageResolver
 {
     internal class PackageMeta
     {

@@ -1,5 +1,5 @@
 {
-    "name": "GRTools.PackageResolver",
+    "name": "GRTools.GitPackageResolver",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [
