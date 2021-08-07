@@ -1,6 +1,5 @@
 #!/bin/bash
 prjPath=`dirname $0`
-cd $prjPath
 
 package_names[1]="GRTools.GitPackageResolver"
 package_names[2]="GRTools.Utils"
@@ -53,14 +52,13 @@ echo "Tag: $tag_name"
 echo
 
 echo "2. Split Git"
-git subtree split --prefix=${package_relative_path} --branch ${display_name}
+git -C $prjPath subtree split --prefix=${package_relative_path} --branch ${display_name}
 
 echo
 echo "3. Tag"
-git tag ${tag_name} ${display_name}
+git -C $prjPath tag ${tag_name} ${display_name}
 echo
 echo "3. Push"
-echo `git push origin ${display_name} --tags`
+echo `git -C $prjPath push origin ${display_name} --tags`
 echo
 echo "Done"
-cd
