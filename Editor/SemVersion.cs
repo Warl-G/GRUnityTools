@@ -28,7 +28,7 @@ using System.Security.Permissions;
 #endif
 using System.Text.RegularExpressions;
 
-namespace GRTools.PackageResolver
+namespace GRTools.GitPackageResolver
 {
     /// <summary>
     /// A semantic version implementation.

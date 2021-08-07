@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using UnityEditor.PackageManager;
 
-namespace GRTools.PackageResolver
+namespace GRTools.GitPackageResolver
 {
     internal static class Resolver
     {
