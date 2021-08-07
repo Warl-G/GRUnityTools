@@ -21,7 +21,7 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 暂不支持
 
-## GRTools.GitPackageResolver  
+#### GRTools.GitPackageResolver  
 
 无论用何种方式导入，强烈建议优先导入 `GRTools.PackageResolver` ，导入后可在 PackageManager 中 `GRTools.PackageResolver`详情界面直接导入其他模块，并且可在其他模块详情信息导入其依赖模块
 
@@ -33,13 +33,13 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 ## 模块
 
-### [GRTools.GitPackageResolver](Assets/GRTools/GitPackageResolver/DOCUMENTS~/DOCUMENT.md)   
+### [GRTools.GitPackageResolver](Assets/GRTools/GitPackageResolver/Documentation~/DOCUMENT.md)   
 
 `"com.warlg.grtools.gitpackageresolver": "https://github.com/Warl-G/GRUnityTools.git#GRTools.GitPackageResolver"`  
 
 由 [GitDependencyResolverForUnity](https://github.com/mob-sakai/GitDependencyResolverForUnity) 改写，用于解析 Git 制作的 Unity Pakcage 依赖，并集成了 GRTools 所有工具，可通过 PackageManager `GRTools.GitPackageResolver`详情一键导入  
 
-### [GRTools.Utils](Assets/GRTools/Utils/DOCUMENTS~/DOCUMENT.md)  
+### [GRTools.Utils](Assets/GRTools/Utils/Documentation~/DOCUMENT.md)  
 
  `"com.warlg.grtools.utils": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Utils"`
 
@@ -53,7 +53,7 @@ GRTools 的通用工具包，部分模块引用该包体内容
 
    csv 解析工具，可以四种模式解析 csv，详见[文档](Assets/GRTools/Utils/Documentation~/Utils.md)
 
-### [GRTools.Thread](Assets/GRTools/Thread/DOCUMENTS~/DOCUMENT.md)   
+### [GRTools.Thread](Assets/GRTools/Thread/Documentation~/DOCUMENT.md)   
 
 `"com.warlg.grtools.thread": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Thread"`
 
@@ -67,7 +67,7 @@ GRTools 的线程工具包
 
    一个实现了同步串行、异步串行、同步并行、异步并行的多线程任务队列工具，详见[文档](Assets/GRTools/Thread/Documentation~/TaskQueue.md)，[编写教程](https://warl-g.github.io/posts/unity-taskqueue/)     
 
-### [GRTools.Sqlite](Assets/GRTools/DataBase/Sqlite/DOCUMENTS~/DOCUMENT.md)  
+### [GRTools.Sqlite](Assets/GRTools/DataBase/Sqlite/Documentation~/DOCUMENT.md)  
 
 `"com.warlg.grtools.sqlite": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Sqlite"`
 
@@ -75,7 +75,7 @@ GRTools 的线程工具包
 
 对 `Mono.Sqlite.Data` 的二次封装和配合 `TaskQueue` 制作的数据库快捷操作和操作队列工具
 
-### [GRTools.Localization](Assets/GRTools/Localization/DOCUMENTS~/DOCUMENT.md)  
+### [GRTools.Localization](Assets/GRTools/Localization/Documentation~/DOCUMENT.md)  
 
 `"com.warlg.grtools.localization": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization"`
 
@@ -91,7 +91,7 @@ GRTools 的本地化工具包，需引用 GRTools.Utils
 
 已扩展 txt（自定义解析规则）、csv 和 json 三种文本解析格式  
 
-### [GRTools.Localization.Addressables](Assets/GRTools/LocalizationExtra/LocalizationAddressables/DOCUMENTS~/DOCUMENT.md)   
+### [GRTools.Localization.Addressables](Assets/GRTools/LocalizationExtra/LocalizationAddressables/Documentation~/DOCUMENT.md)   
 
 `"com.warlg.grtools.localization.addressables": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.Addressables"`
 
@@ -99,7 +99,7 @@ GRTools 的本地化工具的扩展包，需引用 GRTools.Localization
 
 为本地化资源加载扩展 Addressables 支持，详见`GRTools.Localization`  
 
-### [GRTools.Localization.TextMeshPro](Assets/GRTools/LocalizationExtra/LocalizationTMP/DOCUMENTS~/DOCUMENT.md)   
+### [GRTools.Localization.TextMeshPro](Assets/GRTools/LocalizationExtra/LocalizationTMP/Documentation~/DOCUMENT.md)   
 
 `"com.warlg.grtools.localization.tmp": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Localization.TextMeshPro"`
 
