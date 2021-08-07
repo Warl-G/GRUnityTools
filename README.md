@@ -9,7 +9,7 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 #### 修改 manifest.json
 
-在` ./Pacakges/manifest.json` 添加对应模块，格式为 `"com.warlg.grtools.[模块名]": "https://github.com/Warl-G/GRUnityTools.git#[模块名]@[版本号]"`，@[版本号] 为可选字段，需加入依赖模块的 upm 地址
+在` ./Pacakges/manifest.json` 添加对应模块，格式为 `"com.warlg.grtools.[模块名]": "https://github.com/Warl-G/GRUnityTools.git#[模块名]@[版本号]"`，@[版本号] 为可选字段，需加入依赖模块的 UPM 地址
 
 #### 使用 PackageManager  
 
