@@ -1,11 +1,14 @@
 {
   "name": "com.warlg.grtools.thread",
   "displayName": "GRTools.Thread",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "GRTools 多线程队列工具\nmore info : https://github.com/Warl-G/GRUnityTools",
   "license": "MIT",
   "unity": "2018.3",
-  "dependencies": {
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Thread"
   },
   "keywords": [
     "Thread",
