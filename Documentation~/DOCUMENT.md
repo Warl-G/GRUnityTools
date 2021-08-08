@@ -1,5 +1,7 @@
 # GRTools.Addressables  
 
+***v0.0.2***
+
 ## PacakScripts  
 
 Addressables 内置资源独立打包脚本，由 Addressables 1.16.16 `BuildScriptPackedMode`脚本改写，由于不同版本 Addressables API 不同，使用不同版本 Addressables 导入后可能会产生编译错误，建议可以自行参考[Unity 内置资源独立打包](https://warl-g.github.io/posts/Unity-BuiltIn-Pack/)，自己根据当前使用版本改写
