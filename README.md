@@ -29,11 +29,11 @@ GRTools 是一个集成多种工具的 Unity Package，持续扩充中
 
 ## 文档  
 
-各个工具的详细文档可在 Assets/GRTools/*/DOCUMENTS~ 下查看   
+各个工具的详细文档可在 Assets/GRTools/*/Documentation~ 下查看   
 
 ## 模块
 
-### [GRTools.GitPackageResolver](Assets/GRTools/GitPackageResolver/Documentation~/DOCUMENT.md)   
+### [GRTools.GitPackageResolver](Assets/GRTools/PackageResolver/Documentation~/DOCUMENT.md)   
 
 `"com.warlg.grtools.gitpackageresolver": "https://github.com/Warl-G/GRUnityTools.git#GRTools.GitPackageResolver"`  
 
@@ -51,7 +51,7 @@ GRTools 的通用工具包，部分模块引用该包体内容
 
 2. CsvParser  
 
-   csv 解析工具，可以四种模式解析 csv，详见[文档](Assets/GRTools/Utils/Documentation~/Utils.md)
+   csv 解析工具，可以四种模式解析 csv，详见文档
 
 ### [GRTools.Thread](Assets/GRTools/Thread/Documentation~/DOCUMENT.md)   
 
@@ -65,7 +65,7 @@ GRTools 的线程工具包
 
 2. TaskQueue
 
-   一个实现了同步串行、异步串行、同步并行、异步并行的多线程任务队列工具，详见[文档](Assets/GRTools/Thread/Documentation~/TaskQueue.md)，[编写教程](https://warl-g.github.io/posts/unity-taskqueue/)     
+   一个实现了同步串行、异步串行、同步并行、异步并行的多线程任务队列工具，详见文档，[编写教程](https://warl-g.github.io/posts/unity-taskqueue/)     
 
 ### [GRTools.Sqlite](Assets/GRTools/DataBase/Sqlite/Documentation~/DOCUMENT.md)  
 
