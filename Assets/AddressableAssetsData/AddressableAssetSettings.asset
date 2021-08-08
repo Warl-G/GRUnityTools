@@ -85,6 +85,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aa096a6e13d4d4f199cf75940a3b01a0, type: 2}
   - {fileID: 11400000, guid: 9b2015d1fa23646f5bcb83dc0bc1acc0, type: 2}
   - {fileID: 11400000, guid: 30aaa40fa56334b18b6d1be1859a12b0, type: 2}
+  - {fileID: 11400000, guid: d86f1bcd78f7540158738e33f9e1b163, type: 2}
   m_ActiveProfileId: cec7db09d27174e05bb3953113f69a28
   m_HostingServicesManager:
     m_HostingServiceInfos: []
