@@ -1,4 +1,4 @@
-# SqliteHelper  
+# GRTools.Sqlite  
 
 SqliteHelper  是对 Mono.Data.Sqlite 的封装扩展，分为 `SqliteHelper`、`SqliteHelperExtension`和`SqliteHelperQueue`三部分组成   
 
