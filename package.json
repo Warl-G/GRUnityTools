@@ -1,7 +1,7 @@
 {
   "name": "com.warlg.grtools.addressables",
   "displayName": "GRTools.Addressables",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "GRTools 针对 Addressables 的辅助工具包 more info : https://github.com/Warl-G/GRUnityTools",
   "author": "Warl-G",
   "license": "MIT",
