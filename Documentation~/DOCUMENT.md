@@ -1,5 +1,7 @@
 # GRTools.Localization.TextMeshPro  
 
+***v1.0.1***
+
 ## LocalizationTMP  
 
 GRTools.Localization 针对 TextMeshPro 自动化更新的组件  
