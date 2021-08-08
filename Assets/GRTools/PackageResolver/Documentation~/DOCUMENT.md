@@ -1,4 +1,6 @@
-# GRTools.GitPackageResolver  
+# GRTools.GitPackageResolver   
+
+***v1.0.1***
 
 `"com.warlg.grtools.gitpackageresolver": "https://github.com/Warl-G/GRUnityTools.git#GRTools.GitPackageResolver"`
 

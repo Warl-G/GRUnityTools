@@ -1,4 +1,6 @@
-# GRTools.Localization.Addressables  
+# GRTools.Localization.Addressables   
+
+***v1.0.3***
 
 ## LocalizationAddressablesLoader  
 

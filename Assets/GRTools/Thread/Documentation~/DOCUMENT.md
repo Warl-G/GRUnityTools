@@ -1,4 +1,6 @@
-# GRTools.Thread
+# GRTools.Thread  
+
+***v1.0.2***
 
 ## TaskQueue  
 

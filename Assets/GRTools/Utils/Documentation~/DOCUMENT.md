@@ -1,4 +1,6 @@
-# GRTools.Utils
+# GRTools.Utils  
+
+***v1.0.2***
 
 该包主要为其他 GRTools 提供辅助工具，也会扩充其他实用工具  
 
