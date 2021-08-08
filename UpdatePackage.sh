@@ -21,14 +21,12 @@ package_paths[8]="Assets/GRTools/LocalizationExtra/LocalizationAddressables"
 
 echo "Select one package to update:"
 
-index=1
+index=0
 
 while [ $index -lt ${#package_names[@]} ]
 do
-	package=${package_names[$index]}
 	let index++
-  echo "$index $package"
-  
+  	echo "$index ${package_names[$index]}"
 done
 
 read index
