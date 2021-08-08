@@ -3,7 +3,7 @@ using TMPro;
 
 namespace GRTools.Localization
 {
-    public class LocalizationTMPUGUI : MonoBehaviour
+    public class LocalizationTMPUI : MonoBehaviour
     {
         [Tooltip("本地化键")] public string localizationKey;
         [Tooltip("本地化默认文本")] public string defaultValue;
