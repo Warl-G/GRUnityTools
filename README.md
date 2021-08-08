@@ -71,7 +71,7 @@ GRTools 的线程工具包
 
 `"com.warlg.grtools.sqlite": "https://github.com/Warl-G/GRUnityTools.git#GRTools.Sqlite"`
 
-[文档](Assets/GRTools/DataBase/Sqlite/Documentation~/SqliteHelper.md)，，需引用 GRTools.Thread
+需引用 GRTools.Thread
 
 对 `Mono.Sqlite.Data` 的二次封装和配合 `TaskQueue` 制作的数据库快捷操作和操作队列工具
 
